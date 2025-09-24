@@ -330,7 +330,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	LoadingUi:Destroy()
 end
 
-function LoadUi:NewButton(NameOfButton, Function)
+function LoadUi:NewButton(NameOfButton, ButtonFunction)
 	local Button = Instance.new("TextButton", ScriptUi)
 	Button.Font = Enum.Font.RobotoMono.Bold
 	Button.Name = "NewButton"
@@ -338,7 +338,7 @@ function LoadUi:NewButton(NameOfButton, Function)
 	Button.Size = UDim2.new(1, 0,0.028, 0)
 	
 	Button.MouseButton1Up:Connect(function()
-		Function()
+		loadstring(ButtonFunction)
 	end)
 end
 
