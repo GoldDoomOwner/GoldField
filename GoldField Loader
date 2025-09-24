@@ -4,34 +4,47 @@ local LoadUi = {}
 
 
 
-function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient)
+function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, ShowPlayerUi)
 	-- Gui to Lua
 	-- Version: 3.2
 
 	-- Instances:
 
-	local ScreenGui = Instance.new("ScreenGui")
+	local GoldField = Instance.new("ScreenGui")
 	local LoadingUi = Instance.new("Frame")
 	local Default_Gradient = Instance.new("UIGradient")
 	local CornerIT = Instance.new("UICorner")
 	local MainText = Instance.new("TextLabel")
 	local OtherText = Instance.new("TextLabel")
 	local VersionText = Instance.new("TextLabel")
+	local MainUi = Instance.new("Frame")
+	local CornerIT_2 = Instance.new("UICorner")
+	local Default_Gradient_2 = Instance.new("UIGradient")
+	local Player = Instance.new("ImageLabel")
+	local CornerIT_3 = Instance.new("UICorner")
+	local Display = Instance.new("TextLabel")
+	local UserName = Instance.new("TextLabel")
+	local TopUI = Instance.new("Frame")
+	local Default_Gradient_3 = Instance.new("UIGradient")
+	local MainText_2 = Instance.new("TextLabel")
+	local ScriptUi = Instance.new("ScrollingFrame")
+	local UIListLayout = Instance.new("UIListLayout")
+	local X = Instance.new("TextButton")
+	local CornerIT_4 = Instance.new("UICorner")
 
 	--Properties:
 
-	ScreenGui.Parent = game:GetService("CoreGui")
-	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	ScreenGui.Enabled = true
+	GoldField.Name = "GoldField"
+	GoldField.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	GoldField.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 	LoadingUi.Name = "LoadingUi"
-	LoadingUi.Parent = ScreenGui
+	LoadingUi.Parent = GoldField
 	LoadingUi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	LoadingUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	LoadingUi.BorderSizePixel = 0
-	LoadingUi.Position = UDim2.new(0.383988142, 0, 0.449748755, 0)
-	LoadingUi.Size = UDim2.new(0.231282428, 0, 0.0992462337, 0)
-	LoadingUi.Visible = true
+	LoadingUi.Position = UDim2.new(0.424017787, 0, 0.449748755, 0)
+	LoadingUi.Size = UDim2.new(0.151223123, 0, 0.0992462337, 0)
 
 	Default_Gradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))}
 	Default_Gradient.Name = "Default_Gradient"
@@ -55,7 +68,6 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient)
 	MainText.TextSize = 16.000
 	MainText.TextWrapped = true
 	MainText.TextXAlignment = Enum.TextXAlignment.Left
-	MainText.Visible = true
 
 	OtherText.Name = "OtherText"
 	OtherText.Parent = LoadingUi
@@ -63,7 +75,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient)
 	OtherText.BackgroundTransparency = 1.000
 	OtherText.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	OtherText.BorderSizePixel = 0
-	OtherText.Position = UDim2.new(0.0480769239, 0, 0.455696195, 0)
+	OtherText.Position = UDim2.new(0.0480768532, 0, 0.455696195, 0)
 	OtherText.Size = UDim2.new(0, 226, 0, 26)
 	OtherText.Font = Enum.Font.Unknown
 	OtherText.Text = "[Text Here]"
@@ -71,15 +83,14 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient)
 	OtherText.TextSize = 14.000
 	OtherText.TextWrapped = true
 	OtherText.TextXAlignment = Enum.TextXAlignment.Left
-	OtherText.Visible = true
 
 	VersionText.Name = "VersionText"
-	VersionText.Parent = ScreenGui
+	VersionText.Parent = GoldField
 	VersionText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	VersionText.BackgroundTransparency = 1.000
 	VersionText.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	VersionText.BorderSizePixel = 0
-	VersionText.Position = UDim2.new(0.0126019269, 0, 0.954773843, 0)
+	VersionText.Position = UDim2.new(0.00593031896, 0, 0.00879396964, 0)
 	VersionText.Size = UDim2.new(0, 226, 0, 26)
 	VersionText.Font = Enum.Font.Unknown
 	VersionText.Text = "[Text Here]"
@@ -87,13 +98,235 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient)
 	VersionText.TextSize = 14.000
 	VersionText.TextWrapped = true
 	VersionText.TextXAlignment = Enum.TextXAlignment.Left
-	VersionText.Visible = true
+
+	MainUi.Name = "MainUi"
+	MainUi.Parent = GoldField
+	MainUi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	MainUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	MainUi.BorderSizePixel = 0
+	MainUi.Position = UDim2.new(0.338028163, 0, 0.180904523, 0)
+	MainUi.Size = UDim2.new(0.323943675, 0, 0.576633155, 0)
+	MainUi.Visible = false
+
+	CornerIT_2.CornerRadius = UDim.new(0, 16)
+	CornerIT_2.Name = "CornerIT!"
+	CornerIT_2.Parent = MainUi
+
+	Default_Gradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))}
+	Default_Gradient_2.Name = "Default_Gradient"
+	Default_Gradient_2.Parent = MainUi
+
+	Player.Name = "Player"
+	Player.Parent = MainUi
+	Player.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Player.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Player.BorderSizePixel = 0
+	Player.Position = UDim2.new(-0.0526315048, 0, 0.936819196, 0)
+	Player.Size = UDim2.new(0.114867702, 0, 0.111111075, 0)
+	Player.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+
+	CornerIT_3.CornerRadius = UDim.new(1, 0)
+	CornerIT_3.Name = "CornerIT!"
+	CornerIT_3.Parent = Player
+
+	Display.Name = "Display"
+	Display.Parent = Player
+	Display.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Display.BackgroundTransparency = 1.000
+	Display.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Display.BorderSizePixel = 0
+	Display.Position = UDim2.new(1.03591394, 0, 0.156862795, 0)
+	Display.Size = UDim2.new(0, 87, 0, 21)
+	Display.Font = Enum.Font.Unknown
+	Display.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Display.TextScaled = true
+	Display.TextSize = 14.000
+	Display.TextWrapped = true
+	Display.TextXAlignment = Enum.TextXAlignment.Left
+
+	UserName.Name = "UserName"
+	UserName.Parent = Player
+	UserName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	UserName.BackgroundTransparency = 1.000
+	UserName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	UserName.BorderSizePixel = 0
+	UserName.Position = UDim2.new(0.9960711, 0, 0.588235497, 0)
+	UserName.Size = UDim2.new(0, 87, 0, 12)
+	UserName.Font = Enum.Font.Unknown
+	UserName.TextColor3 = Color3.fromRGB(255, 255, 255)
+	UserName.TextScaled = true
+	UserName.TextSize = 14.000
+	UserName.TextWrapped = true
+	UserName.TextXAlignment = Enum.TextXAlignment.Left
+
+	TopUI.Name = "TopUI"
+	TopUI.Parent = MainUi
+	TopUI.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TopUI.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TopUI.BorderSizePixel = 0
+	TopUI.Position = UDim2.new(-6.98342717e-08, 0, 0, 0)
+	TopUI.Size = UDim2.new(1.00000012, 0, 0.0634983182, 0)
+
+	Default_Gradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))}
+	Default_Gradient_3.Name = "Default_Gradient"
+	Default_Gradient_3.Parent = TopUI
+
+	MainText_2.Name = "MainText"
+	MainText_2.Parent = TopUI
+	MainText_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	MainText_2.BackgroundTransparency = 1.000
+	MainText_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	MainText_2.BorderSizePixel = 0
+	MainText_2.Position = UDim2.new(0.0137519026, 0, 0.0236511882, 0)
+	MainText_2.Size = UDim2.new(0, 226, 0, 26)
+	MainText_2.Font = Enum.Font.Unknown
+	MainText_2.Text = "[Text Here]"
+	MainText_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+	MainText_2.TextSize = 16.000
+	MainText_2.TextWrapped = true
+	MainText_2.TextXAlignment = Enum.TextXAlignment.Left
+
+	ScriptUi.Name = "ScriptUi"
+	ScriptUi.Parent = MainUi
+	ScriptUi.Active = true
+	ScriptUi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ScriptUi.BackgroundTransparency = 1.000
+	ScriptUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ScriptUi.BorderSizePixel = 0
+	ScriptUi.Position = UDim2.new(0.0137299765, 0, 0.0784313753, 0)
+	ScriptUi.Size = UDim2.new(0.954233348, 0, 0.834422648, 0)
+
+	UIListLayout.Parent = ScriptUi
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+	X.Name = "X"
+	X.Parent = MainUi
+	X.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+	X.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	X.BorderSizePixel = 0
+	X.Position = UDim2.new(0.938215017, 0, 0.0130719617, 0)
+	X.Size = UDim2.new(0.0366132706, 0, 0.0351758599, 0)
+	X.Font = Enum.Font.Unknown
+	X.Text = "X"
+	X.TextColor3 = Color3.fromRGB(0, 0, 0)
+	X.TextSize = 14.000
+
+	CornerIT_4.CornerRadius = UDim.new(1, 0)
+	CornerIT_4.Name = "CornerIT!"
+	CornerIT_4.Parent = X
+
+	-- Scripts:
+
+	local function HOLI_fake_script() -- Player.LocalScript 
+		local script = Instance.new('LocalScript', Player)
+
+		local plr = game.Players.LocalPlayer
+		local char = plr.Character or plr.CharacterAdded:Wait()
+
+		local PlayerImage = script.Parent
+		local Display = PlayerImage.Display
+		local Username = PlayerImage.UserName
+
+		PlayerImage.Image = "rbxthumb://type=AvatarHeadShot&id=" .. plr.UserId .. "&w=150&h=150"
+		Display.Text = plr.DisplayName
+		Username.Text = "@" .. plr.Name
+	end
+	coroutine.wrap(HOLI_fake_script)()
+	local function AAIAR_fake_script() -- TopUI.LocalScript 
+		local script = Instance.new('LocalScript', TopUI)
+
+		-- LocalScript to make MainUI draggable using CornerIT as the drag handle
+		-- Put this script in CornerIT
+
+		local UserInputService = game:GetService("UserInputService")
+
+		-- Get the drag handle (CornerIT)
+		local dragHandle = script.Parent -- CornerIT
+
+		-- Get the main UI that should move (MainUI)
+		local mainUI = dragHandle.Parent -- MainUI
+
+		-- Variables for dragging
+		local dragging = false
+		local dragStart = nil
+		local startPos = nil
+
+		-- Function to start dragging
+		local function startDrag(input)
+			dragging = true
+			dragStart = input.Position
+			startPos = mainUI.Position
+		end
+
+		-- Function to update position while dragging
+		local function updateDrag(input)
+			if dragging then
+				local delta = input.Position - dragStart
+				local viewport = mainUI.Parent.AbsoluteSize
+
+				mainUI.Position = UDim2.new(
+					startPos.X.Scale,
+					startPos.X.Offset + delta.X,
+					startPos.Y.Scale,
+					startPos.Y.Offset + delta.Y
+				)
+			end
+		end
+
+		-- Function to stop dragging
+		local function stopDrag()
+			dragging = false
+		end
+
+		-- Make the drag handle active
+		dragHandle.Active = true
+
+		-- Connect drag events to the handle
+		dragHandle.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				startDrag(input)
+			end
+		end)
+
+		UserInputService.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				updateDrag(input)
+			end
+		end)
+
+		UserInputService.InputEnded:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				stopDrag()
+			end
+		end)
+	end
+	coroutine.wrap(AAIAR_fake_script)()
+	local function OJCO_fake_script() -- X.LocalScript 
+		local script = Instance.new('LocalScript', X)
+
+		script.Parent.Activated:Connect(function()
+			script.Parent.Parent.Parent:Destroy()
+		end)
+	end
+	coroutine.wrap(OJCO_fake_script)()
 	
 	task.wait()
 	
-	VersionText.Text = versionOfUi
+	VersionText.Text = "Version: "..versionOfUi
 	MainText.Text = name1
 	OtherText.Text = name2
+	
+	task.wait(2)
+	
+	if ShowPlayerUi == true then
+		Player.Visible = true
+	else
+		Player:Destroy()
+	end
+	
+	MainUi.Visible = true
+	MainText_2.Text = mainUiName
+	LoadingUi:Destroy()
 end
 
 return LoadUi
