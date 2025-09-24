@@ -280,11 +280,11 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 		GoldField:Destroy()
 	end)
 
-	-- Set text values
+	-- Set text values with proper nil handling
 	task.wait(0.1)
-	VersionText.Text = "Version: " .. tostring(versionOfUi or "")
-	MainText.Text = tostring(name1 or "")
-	OtherText.Text = tostring(name2 or "")
+	VersionText.Text = "Version: " .. tostring(versionOfUi or "Unknown")
+	MainText.Text = tostring(name1 or "Loading...")
+	OtherText.Text = tostring(name2 or "Please wait...")
 
 	-- Wait for loading effect
 	task.wait(2)
@@ -298,18 +298,11 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 
 	-- Show main UI and hide loading
 	MainUi.Visible = true
-	MainText_2.Text = tostring(mainUiName or "")
+	MainText_2.Text = tostring(mainUiName or "UI")
 	LoadingUi:Destroy()
 
-	-- Return interface for external control
-	return {
-		ScreenGui = GoldField,
-		MainUi = MainUi,
-		ScriptUi = ScriptUi,
-		Close = function()
-			GoldField:Destroy()
-		end
-	}
+	-- Return the LoadUi object itself for method chaining
+	return LoadUi
 end
 
 function LoadUi:NewButton(NameOfButton, ButtonFunction)
@@ -322,7 +315,7 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction)
 	Button.Parent = ScriptUi
 	Button.Font = Enum.Font.RobotoMono
 	Button.Name = "NewButton"
-	Button.Text = tostring(NameOfButton)
+	Button.Text = tostring(NameOfButton or "Button")
 	Button.Size = UDim2.new(1, -10, 0, 30)
 	Button.TextScaled = true
 	Button.TextWrapped = true
@@ -375,7 +368,7 @@ function LoadUi:NewText(Text)
 	TextLabel.Parent = ScriptUi
 	TextLabel.Font = Enum.Font.RobotoMono
 	TextLabel.Name = "NewText"
-	TextLabel.Text = tostring(Text)
+	TextLabel.Text = tostring(Text or "Text")
 	TextLabel.Size = UDim2.new(1, -10, 0, 25)
 	TextLabel.TextScaled = true
 	TextLabel.TextWrapped = true
@@ -390,4 +383,5 @@ function LoadUi:NewText(Text)
 	return TextLabel
 end
 
+-- Return the LoadUi table when the script is loaded
 return LoadUi
