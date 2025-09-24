@@ -383,23 +383,264 @@ function LoadUi:NewDivider()
 	end
 
 	local DividerFrame = Instance.new("Frame")
-	DividerFrame.BackgroundTransparency = 1
 	DividerFrame.Parent = ScriptUi
 	DividerFrame.Name = "NewDivider"
-	DividerFrame.Size = UDim2.new(1, -20, 0, 15)
+	DividerFrame.Size = UDim2.new(1, -20, 0, 10)
+	DividerFrame.BackgroundTransparency = 1
+	DividerFrame.BorderSizePixel = 0
 
 	local DividerLine = Instance.new("Frame")
-	DividerLine.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-	DividerLine.BorderSizePixel = 0
 	DividerLine.Parent = DividerFrame
-	DividerLine.Position = UDim2.new(0, 10, 0.5, -1)
-	DividerLine.Size = UDim2.new(1, -20, 0, 2)
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 1)
-	corner.Parent = DividerLine
+	DividerLine.Name = "Line"
+	DividerLine.Size = UDim2.new(1, 0, 0, 1)
+	DividerLine.Position = UDim2.new(0, 0, 0.5, 0)
+	DividerLine.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+	DividerLine.BorderSizePixel = 0
 
 	return DividerFrame
+end
+
+function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction)
+	if not ScriptUi or not ScriptUi.Parent then
+		warn("LoadUi:NewToggle() - No window created yet. Call LoadWindow() first.")
+		return nil
+	end
+
+	local ToggleState = DefaultState or false
+	
+	local ToggleFrame = Instance.new("Frame")
+	ToggleFrame.Parent = ScriptUi
+	ToggleFrame.Name = "NewToggle"
+	ToggleFrame.Size = UDim2.new(1, -10, 0, 30)
+	ToggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	ToggleFrame.BorderSizePixel = 0
+
+	local toggleCorner = Instance.new("UICorner")
+	toggleCorner.CornerRadius = UDim.new(0, 5)
+	toggleCorner.Parent = ToggleFrame
+
+	local ToggleButton = Instance.new("TextButton")
+	ToggleButton.Parent = ToggleFrame
+	ToggleButton.Name = "Button"
+	ToggleButton.Size = UDim2.new(1, 0, 1, 0)
+	ToggleButton.BackgroundTransparency = 1
+	ToggleButton.Text = ""
+
+	local ToggleLabel = Instance.new("TextLabel")
+	ToggleLabel.Parent = ToggleFrame
+	ToggleLabel.Name = "Label"
+	ToggleLabel.BackgroundTransparency = 1
+	ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
+	ToggleLabel.Size = UDim2.new(1, -50, 1, 0)
+	ToggleLabel.Font = Enum.Font.RobotoMono
+	ToggleLabel.Text = tostring(ToggleName or "Toggle")
+	ToggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	ToggleLabel.TextScaled = true
+	ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local ToggleSwitch = Instance.new("Frame")
+	ToggleSwitch.Parent = ToggleFrame
+	ToggleSwitch.Name = "Switch"
+	ToggleSwitch.Position = UDim2.new(1, -35, 0.5, -8)
+	ToggleSwitch.Size = UDim2.new(0, 30, 0, 16)
+	ToggleSwitch.BackgroundColor3 = ToggleState and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(100, 100, 100)
+	ToggleSwitch.BorderSizePixel = 0
+
+	local switchCorner = Instance.new("UICorner")
+	switchCorner.CornerRadius = UDim.new(0, 8)
+	switchCorner.Parent = ToggleSwitch
+
+	local ToggleCircle = Instance.new("Frame")
+	ToggleCircle.Parent = ToggleSwitch
+	ToggleCircle.Name = "Circle"
+	ToggleCircle.Size = UDim2.new(0, 12, 0, 12)
+	ToggleCircle.Position = ToggleState and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+	ToggleCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ToggleCircle.BorderSizePixel = 0
+
+	local circleCorner = Instance.new("UICorner")
+	circleCorner.CornerRadius = UDim.new(0, 6)
+	circleCorner.Parent = ToggleCircle
+
+	local function UpdateToggle()
+		local TweenService = game:GetService("TweenService")
+		local switchTween = TweenService:Create(ToggleSwitch, TweenInfo.new(0.2), {
+			BackgroundColor3 = ToggleState and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(100, 100, 100)
+		})
+		local circleTween = TweenService:Create(ToggleCircle, TweenInfo.new(0.2), {
+			Position = ToggleState and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+		})
+		switchTween:Play()
+		circleTween:Play()
+	end
+
+	ToggleButton.MouseButton1Click:Connect(function()
+		ToggleState = not ToggleState
+		UpdateToggle()
+		
+		if ToggleFunction then
+			local success, err = pcall(function()
+				if type(ToggleFunction) == "function" then
+					ToggleFunction(ToggleState)
+				elseif type(ToggleFunction) == "string" then
+					loadstring(ToggleFunction)(ToggleState)
+				end
+			end)
+			
+			if not success then
+				warn("Toggle function error:", err)
+			end
+		end
+	end)
+
+	return {
+		Frame = ToggleFrame,
+		GetState = function() return ToggleState end,
+		SetState = function(newState)
+			ToggleState = newState
+			UpdateToggle()
+		end
+	}
+end
+
+function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction)
+	if not ScriptUi or not ScriptUi.Parent then
+		warn("LoadUi:NewDropdown() - No window created yet. Call LoadWindow() first.")
+		return nil
+	end
+
+	local OptionsTable = Options or {"Option 1", "Option 2", "Option 3"}
+	local SelectedOption = DefaultOption or OptionsTable[1]
+	local IsOpen = false
+
+	local DropdownFrame = Instance.new("Frame")
+	DropdownFrame.Parent = ScriptUi
+	DropdownFrame.Name = "NewDropdown"
+	DropdownFrame.Size = UDim2.new(1, -10, 0, 30)
+	DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	DropdownFrame.BorderSizePixel = 0
+	DropdownFrame.ClipsDescendants = true
+
+	local dropdownCorner = Instance.new("UICorner")
+	dropdownCorner.CornerRadius = UDim.new(0, 5)
+	dropdownCorner.Parent = DropdownFrame
+
+	local DropdownButton = Instance.new("TextButton")
+	DropdownButton.Parent = DropdownFrame
+	DropdownButton.Name = "Button"
+	DropdownButton.Size = UDim2.new(1, 0, 0, 30)
+	DropdownButton.BackgroundTransparency = 1
+	DropdownButton.Text = ""
+
+	local DropdownLabel = Instance.new("TextLabel")
+	DropdownLabel.Parent = DropdownButton
+	DropdownLabel.Name = "Label"
+	DropdownLabel.BackgroundTransparency = 1
+	DropdownLabel.Position = UDim2.new(0, 10, 0, 0)
+	DropdownLabel.Size = UDim2.new(1, -30, 1, 0)
+	DropdownLabel.Font = Enum.Font.RobotoMono
+	DropdownLabel.Text = tostring(DropdownName or "Dropdown") .. ": " .. tostring(SelectedOption)
+	DropdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	DropdownLabel.TextScaled = true
+	DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local DropdownArrow = Instance.new("TextLabel")
+	DropdownArrow.Parent = DropdownButton
+	DropdownArrow.Name = "Arrow"
+	DropdownArrow.BackgroundTransparency = 1
+	DropdownArrow.Position = UDim2.new(1, -25, 0, 0)
+	DropdownArrow.Size = UDim2.new(0, 20, 1, 0)
+	DropdownArrow.Font = Enum.Font.RobotoMono
+	DropdownArrow.Text = "▼"
+	DropdownArrow.TextColor3 = Color3.fromRGB(255, 255, 255)
+	DropdownArrow.TextScaled = true
+
+	local OptionsFrame = Instance.new("Frame")
+	OptionsFrame.Parent = DropdownFrame
+	OptionsFrame.Name = "Options"
+	OptionsFrame.Position = UDim2.new(0, 0, 0, 30)
+	OptionsFrame.Size = UDim2.new(1, 0, 0, #OptionsTable * 25)
+	OptionsFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	OptionsFrame.BorderSizePixel = 0
+
+	local optionsLayout = Instance.new("UIListLayout")
+	optionsLayout.Parent = OptionsFrame
+	optionsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+	local function UpdateDropdown()
+		local TweenService = game:GetService("TweenService")
+		local sizeTween = TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
+			Size = IsOpen and UDim2.new(1, -10, 0, 30 + (#OptionsTable * 25)) or UDim2.new(1, -10, 0, 30)
+		})
+		local arrowTween = TweenService:Create(DropdownArrow, TweenInfo.new(0.2), {
+			Rotation = IsOpen and 180 or 0
+		})
+		sizeTween:Play()
+		arrowTween:Play()
+	end
+
+	for i, option in ipairs(OptionsTable) do
+		local OptionButton = Instance.new("TextButton")
+		OptionButton.Parent = OptionsFrame
+		OptionButton.Name = "Option_" .. i
+		OptionButton.Size = UDim2.new(1, 0, 0, 25)
+		OptionButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+		OptionButton.BorderSizePixel = 0
+		OptionButton.Font = Enum.Font.RobotoMono
+		OptionButton.Text = "  " .. tostring(option)
+		OptionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		OptionButton.TextScaled = true
+		OptionButton.TextXAlignment = Enum.TextXAlignment.Left
+
+		OptionButton.MouseEnter:Connect(function()
+			OptionButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		end)
+
+		OptionButton.MouseLeave:Connect(function()
+			OptionButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+		end)
+
+		OptionButton.MouseButton1Click:Connect(function()
+			SelectedOption = option
+			DropdownLabel.Text = tostring(DropdownName or "Dropdown") .. ": " .. tostring(SelectedOption)
+			IsOpen = false
+			UpdateDropdown()
+
+			if SelectFunction then
+				local success, err = pcall(function()
+					if type(SelectFunction) == "function" then
+						SelectFunction(SelectedOption)
+					elseif type(SelectFunction) == "string" then
+						loadstring(SelectFunction)(SelectedOption)
+					end
+				end)
+				
+				if not success then
+					warn("Dropdown select function error:", err)
+				end
+			end
+		end)
+	end
+
+	DropdownButton.MouseButton1Click:Connect(function()
+		IsOpen = not IsOpen
+		UpdateDropdown()
+	end)
+
+	return {
+		Frame = DropdownFrame,
+		GetSelected = function() return SelectedOption end,
+		SetSelected = function(option)
+			if table.find(OptionsTable, option) then
+				SelectedOption = option
+				DropdownLabel.Text = tostring(DropdownName or "Dropdown") .. ": " .. tostring(SelectedOption)
+			end
+		end,
+		AddOption = function(option)
+			table.insert(OptionsTable, option)
+			-- Recreate options (simplified approach)
+		end
+	}
 end
 
 -- Return the LoadUi table
