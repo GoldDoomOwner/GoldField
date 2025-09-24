@@ -331,7 +331,8 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 end
 
 function LoadUi:NewButton(NameOfButton, ButtonFunction)
-	local Button = Instance.new("TextButton", ScriptUi)
+	local Button = Instance.new("TextButton")
+	Button.Parent = ScriptUi
 	Button.Font = Enum.Font.RobotoMono
 	Button.Style = Enum.FontStyle.Normal
 	Button.Weight = Enum.FontWeight.Bold
