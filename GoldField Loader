@@ -2,15 +2,11 @@ local plr = game.Players.LocalPlayer
 
 local LoadUi = {}
 
-local ScriptUi = Instance.new("ScrollingFrame")
-ScriptUi.Visible = false
+-- Make ScriptUi accessible to both functions
+local ScriptUi = nil
 
 function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, ShowPlayerUi)
-	-- Gui to Lua
-	-- Version: 3.2
-
 	-- Instances:
-
 	local GoldField = Instance.new("ScreenGui")
 	local LoadingUi = Instance.new("Frame")
 	local Default_Gradient = Instance.new("UIGradient")
@@ -32,10 +28,12 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	local X = Instance.new("TextButton")
 	local CornerIT_4 = Instance.new("UICorner")
 
-	--Properties:
+	-- Create ScriptUi and assign to module variable
+	ScriptUi = Instance.new("ScrollingFrame")
 
+	--Properties:
 	GoldField.Name = "GoldField"
-	GoldField.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	GoldField.Parent = plr:WaitForChild("PlayerGui")
 	GoldField.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 	LoadingUi.Name = "LoadingUi"
@@ -51,7 +49,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	Default_Gradient.Parent = LoadingUi
 
 	CornerIT.CornerRadius = UDim.new(0, 16)
-	CornerIT.Name = "CornerIT!"
+	CornerIT.Name = "CornerIT"
 	CornerIT.Parent = LoadingUi
 
 	MainText.Name = "MainText"
@@ -62,7 +60,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainText.BorderSizePixel = 0
 	MainText.Position = UDim2.new(0.0480769239, 0, 0.12658228, 0)
 	MainText.Size = UDim2.new(0, 226, 0, 26)
-	MainText.Font = Enum.Font.Unknown
+	MainText.Font = Enum.Font.GothamBold
 	MainText.Text = "[Text Here]"
 	MainText.TextColor3 = Color3.fromRGB(255, 255, 255)
 	MainText.TextSize = 16.000
@@ -77,7 +75,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	OtherText.BorderSizePixel = 0
 	OtherText.Position = UDim2.new(0.0480768532, 0, 0.455696195, 0)
 	OtherText.Size = UDim2.new(0, 226, 0, 26)
-	OtherText.Font = Enum.Font.Unknown
+	OtherText.Font = Enum.Font.Gotham
 	OtherText.Text = "[Text Here]"
 	OtherText.TextColor3 = Color3.fromRGB(255, 255, 255)
 	OtherText.TextSize = 14.000
@@ -92,7 +90,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	VersionText.BorderSizePixel = 0
 	VersionText.Position = UDim2.new(0.00593031896, 0, 0.00879396964, 0)
 	VersionText.Size = UDim2.new(0, 226, 0, 26)
-	VersionText.Font = Enum.Font.Unknown
+	VersionText.Font = Enum.Font.Gotham
 	VersionText.Text = "[Text Here]"
 	VersionText.TextColor3 = Color3.fromRGB(255, 255, 255)
 	VersionText.TextSize = 14.000
@@ -109,7 +107,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainUi.Visible = false
 
 	CornerIT_2.CornerRadius = UDim.new(0, 16)
-	CornerIT_2.Name = "CornerIT!"
+	CornerIT_2.Name = "CornerIT"
 	CornerIT_2.Parent = MainUi
 
 	Default_Gradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))}
@@ -126,7 +124,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	Player.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 
 	CornerIT_3.CornerRadius = UDim.new(1, 0)
-	CornerIT_3.Name = "CornerIT!"
+	CornerIT_3.Name = "CornerIT"
 	CornerIT_3.Parent = Player
 
 	Display.Name = "Display"
@@ -137,7 +135,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(1.03591394, 0, 0.156862795, 0)
 	Display.Size = UDim2.new(0, 87, 0, 21)
-	Display.Font = Enum.Font.Unknown
+	Display.Font = Enum.Font.Gotham
 	Display.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Display.TextScaled = true
 	Display.TextSize = 14.000
@@ -152,7 +150,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	UserName.BorderSizePixel = 0
 	UserName.Position = UDim2.new(0.9960711, 0, 0.588235497, 0)
 	UserName.Size = UDim2.new(0, 87, 0, 12)
-	UserName.Font = Enum.Font.Unknown
+	UserName.Font = Enum.Font.Gotham
 	UserName.TextColor3 = Color3.fromRGB(255, 255, 255)
 	UserName.TextScaled = true
 	UserName.TextSize = 14.000
@@ -179,7 +177,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainText_2.BorderSizePixel = 0
 	MainText_2.Position = UDim2.new(0.0137519026, 0, 0.0236511882, 0)
 	MainText_2.Size = UDim2.new(0, 226, 0, 26)
-	MainText_2.Font = Enum.Font.Unknown
+	MainText_2.Font = Enum.Font.Gotham
 	MainText_2.Text = "[Text Here]"
 	MainText_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 	MainText_2.TextSize = 16.000
@@ -193,12 +191,14 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	ScriptUi.BackgroundTransparency = 1.000
 	ScriptUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ScriptUi.BorderSizePixel = 0
-	ScriptUi.Visible = true
 	ScriptUi.Position = UDim2.new(0.0137299765, 0, 0.0784313753, 0)
 	ScriptUi.Size = UDim2.new(0.954233348, 0, 0.834422648, 0)
+	ScriptUi.CanvasSize = UDim2.new(0, 0, 0, 0) -- Auto-resize
+	ScriptUi.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
 	UIListLayout.Parent = ScriptUi
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	UIListLayout.Padding = UDim.new(0, 2)
 
 	X.Name = "X"
 	X.Parent = MainUi
@@ -207,64 +207,40 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	X.BorderSizePixel = 0
 	X.Position = UDim2.new(0.938215017, 0, 0.0130719617, 0)
 	X.Size = UDim2.new(0.0366132706, 0, 0.0351758599, 0)
-	X.Font = Enum.Font.Unknown
+	X.Font = Enum.Font.GothamBold
 	X.Text = "X"
 	X.TextColor3 = Color3.fromRGB(0, 0, 0)
 	X.TextSize = 14.000
 
 	CornerIT_4.CornerRadius = UDim.new(1, 0)
-	CornerIT_4.Name = "CornerIT!"
+	CornerIT_4.Name = "CornerIT"
 	CornerIT_4.Parent = X
 
-	-- Scripts:
-
-	local function HOLI_fake_script() -- Player.LocalScript 
-		local script = Instance.new('LocalScript', Player)
-
-		local plr = game.Players.LocalPlayer
-		local char = plr.Character or plr.CharacterAdded:Wait()
-
-		local PlayerImage = script.Parent
-		local Display = PlayerImage.Display
-		local Username = PlayerImage.UserName
-
-		PlayerImage.Image = "rbxthumb://type=AvatarHeadShot&id=" .. plr.UserId .. "&w=150&h=150"
+	-- Player Image Script
+	task.spawn(function()
+		Player.Image = "rbxthumb://type=AvatarHeadShot&id=" .. plr.UserId .. "&w=150&h=150"
 		Display.Text = plr.DisplayName
-		Username.Text = "@" .. plr.Name
-	end
-	coroutine.wrap(HOLI_fake_script)()
-	local function AAIAR_fake_script() -- TopUI.LocalScript 
-		local script = Instance.new('LocalScript', TopUI)
+		UserName.Text = "@" .. plr.Name
+	end)
 
-		-- LocalScript to make MainUI draggable using CornerIT as the drag handle
-		-- Put this script in CornerIT
-
+	-- Draggable Script
+	task.spawn(function()
 		local UserInputService = game:GetService("UserInputService")
-
-		-- Get the drag handle (CornerIT)
-		local dragHandle = script.Parent -- CornerIT
-
-		-- Get the main UI that should move (MainUI)
-		local mainUI = dragHandle.Parent -- MainUI
-
-		-- Variables for dragging
+		local dragHandle = TopUI
+		local mainUI = MainUi
 		local dragging = false
 		local dragStart = nil
 		local startPos = nil
 
-		-- Function to start dragging
 		local function startDrag(input)
 			dragging = true
 			dragStart = input.Position
 			startPos = mainUI.Position
 		end
 
-		-- Function to update position while dragging
 		local function updateDrag(input)
 			if dragging then
 				local delta = input.Position - dragStart
-				local viewport = mainUI.Parent.AbsoluteSize
-
 				mainUI.Position = UDim2.new(
 					startPos.X.Scale,
 					startPos.X.Offset + delta.X,
@@ -274,15 +250,12 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 			end
 		end
 
-		-- Function to stop dragging
 		local function stopDrag()
 			dragging = false
 		end
 
-		-- Make the drag handle active
 		dragHandle.Active = true
 
-		-- Connect drag events to the handle
 		dragHandle.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				startDrag(input)
@@ -300,57 +273,95 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 				stopDrag()
 			end
 		end)
-	end
-	coroutine.wrap(AAIAR_fake_script)()
-	local function OJCO_fake_script() -- X.LocalScript 
-		local script = Instance.new('LocalScript', X)
+	end)
 
-		script.Parent.Activated:Connect(function()
-			script.Parent.Parent.Parent:Destroy()
-		end)
-	end
-	coroutine.wrap(OJCO_fake_script)()
-	
-	task.wait()
-	
-	VersionText.Text = "Version: "..versionOfUi
-	MainText.Text = name1
-	OtherText.Text = name2
-	
+	-- Close Button Script
+	X.Activated:Connect(function()
+		GoldField:Destroy()
+	end)
+
+	-- Set text values
+	task.wait(0.1)
+	VersionText.Text = "Version: " .. tostring(versionOfUi)
+	MainText.Text = tostring(name1)
+	OtherText.Text = tostring(name2)
+
+	-- Wait for loading effect
 	task.wait(2)
-	
+
+	-- Handle player UI visibility
 	if ShowPlayerUi == "Enabled" then
 		Player.Visible = true
 	else
 		Player:Destroy()
 	end
-	
+
+	-- Show main UI and hide loading
 	MainUi.Visible = true
-	MainText_2.Text = mainUiName
+	MainText_2.Text = tostring(mainUiName)
 	LoadingUi:Destroy()
+
+	-- Return interface for external control
+	return {
+		ScreenGui = GoldField,
+		MainUi = MainUi,
+		ScriptUi = ScriptUi,
+		Close = function()
+			GoldField:Destroy()
+		end
+	}
 end
 
 function LoadUi:NewButton(NameOfButton, ButtonFunction)
+	if not ScriptUi then
+		warn("LoadUi:NewButton() - No window created yet. Call LoadWindow() first.")
+		return
+	end
+
 	local Button = Instance.new("TextButton")
 	Button.Parent = ScriptUi
 	Button.Font = Enum.Font.RobotoMono
-	Button.Style = Enum.FontStyle.Normal
-	Button.Weight = Enum.FontWeight.Bold
 	Button.Name = "NewButton"
-	Button.Text = NameOfButton
-	Button.Size = UDim2.new(1, 0,0.028, 0)
+	Button.Text = tostring(NameOfButton)
+	Button.Size = UDim2.new(1, -10, 0, 30) -- Fixed height with padding
 	Button.TextScaled = true
 	Button.TextWrapped = true
-	Button.BackgroundColor = Color3.fromRGB(0,0,0)
+	Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Button.TextXAlignment = Enum.TextXAlignment.Left
-	
-	Button.MouseButton1Up:Connect(function()
-		if ButtonFunction ~= "https://" or ButtonFunction ~= "http://" then
-			loadstring(game:HttpGet(ButtonFunction))
-		else
-			loadstring(ButtonFunction)
+	Button.BorderSizePixel = 0
+
+	-- Add corner radius
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 5)
+	corner.Parent = Button
+
+	-- Add padding
+	local padding = Instance.new("UIPadding")
+	padding.PaddingLeft = UDim.new(0, 10)
+	padding.Parent = Button
+
+	Button.MouseButton1Click:Connect(function()
+		local success, err = pcall(function()
+			if type(ButtonFunction) == "string" then
+				if ButtonFunction:match("^https?://") then
+					-- URL - use HttpGet
+					loadstring(game:HttpGet(ButtonFunction))()
+				else
+					-- Direct code
+					loadstring(ButtonFunction)()
+				end
+			elseif type(ButtonFunction) == "function" then
+				ButtonFunction()
+			end
+		end)
+		
+		if not success then
+			warn("Button error:", err)
 		end
 	end)
+
+	return Button
 end
 
 return LoadUi
