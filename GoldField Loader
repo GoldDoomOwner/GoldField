@@ -318,7 +318,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	
 	task.wait(2)
 	
-	if ShowPlayerUi == true then
+	if ShowPlayerUi == "Enabled" then
 		Player.Visible = true
 	else
 		Player:Destroy()
