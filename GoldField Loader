@@ -1,0 +1,99 @@
+local plr = game.Players.LocalPlayer
+
+local LoadUi = {}
+
+
+
+function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient)
+	-- Gui to Lua
+	-- Version: 3.2
+
+	-- Instances:
+
+	local ScreenGui = Instance.new("ScreenGui")
+	local LoadingUi = Instance.new("Frame")
+	local Default_Gradient = Instance.new("UIGradient")
+	local CornerIT = Instance.new("UICorner")
+	local MainText = Instance.new("TextLabel")
+	local OtherText = Instance.new("TextLabel")
+	local VersionText = Instance.new("TextLabel")
+
+	--Properties:
+
+	ScreenGui.Parent = game:GetService("CoreGui")
+	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	ScreenGui.Enabled = true
+
+	LoadingUi.Name = "LoadingUi"
+	LoadingUi.Parent = ScreenGui
+	LoadingUi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	LoadingUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	LoadingUi.BorderSizePixel = 0
+	LoadingUi.Position = UDim2.new(0.383988142, 0, 0.449748755, 0)
+	LoadingUi.Size = UDim2.new(0.231282428, 0, 0.0992462337, 0)
+	LoadingUi.Visible = true
+
+	Default_Gradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))}
+	Default_Gradient.Name = "Default_Gradient"
+	Default_Gradient.Parent = LoadingUi
+
+	CornerIT.CornerRadius = UDim.new(0, 16)
+	CornerIT.Name = "CornerIT!"
+	CornerIT.Parent = LoadingUi
+
+	MainText.Name = "MainText"
+	MainText.Parent = LoadingUi
+	MainText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	MainText.BackgroundTransparency = 1.000
+	MainText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	MainText.BorderSizePixel = 0
+	MainText.Position = UDim2.new(0.0480769239, 0, 0.12658228, 0)
+	MainText.Size = UDim2.new(0, 226, 0, 26)
+	MainText.Font = Enum.Font.Unknown
+	MainText.Text = "[Text Here]"
+	MainText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	MainText.TextSize = 16.000
+	MainText.TextWrapped = true
+	MainText.TextXAlignment = Enum.TextXAlignment.Left
+	MainText.Visible = true
+
+	OtherText.Name = "OtherText"
+	OtherText.Parent = LoadingUi
+	OtherText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	OtherText.BackgroundTransparency = 1.000
+	OtherText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	OtherText.BorderSizePixel = 0
+	OtherText.Position = UDim2.new(0.0480769239, 0, 0.455696195, 0)
+	OtherText.Size = UDim2.new(0, 226, 0, 26)
+	OtherText.Font = Enum.Font.Unknown
+	OtherText.Text = "[Text Here]"
+	OtherText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	OtherText.TextSize = 14.000
+	OtherText.TextWrapped = true
+	OtherText.TextXAlignment = Enum.TextXAlignment.Left
+	OtherText.Visible = true
+
+	VersionText.Name = "VersionText"
+	VersionText.Parent = ScreenGui
+	VersionText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	VersionText.BackgroundTransparency = 1.000
+	VersionText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	VersionText.BorderSizePixel = 0
+	VersionText.Position = UDim2.new(0.0126019269, 0, 0.954773843, 0)
+	VersionText.Size = UDim2.new(0, 226, 0, 26)
+	VersionText.Font = Enum.Font.Unknown
+	VersionText.Text = "[Text Here]"
+	VersionText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	VersionText.TextSize = 14.000
+	VersionText.TextWrapped = true
+	VersionText.TextXAlignment = Enum.TextXAlignment.Left
+	VersionText.Visible = true
+	
+	task.wait()
+	
+	VersionText.Text = versionOfUi
+	MainText.Text = name1
+	OtherText.Text = name2
+end
+
+return LoadUi
