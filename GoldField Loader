@@ -345,7 +345,11 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction)
 	Button.TextXAlignment = Enum.TextXAlignment.Left
 	
 	Button.MouseButton1Up:Connect(function()
-		ButtonFunction()
+		if ButtonFunction ~= "https://" or ButtonFunction ~= "http://" then
+			loadstring(game:HttpGet(ButtonFunction))
+		else
+			loadstring(ButtonFunction)
+		end
 	end)
 end
 
