@@ -2,7 +2,8 @@ local plr = game.Players.LocalPlayer
 
 local LoadUi = {}
 
-
+local ScriptUi = Instance.new("ScrollingFrame")
+ScriptUi.Visible = false
 
 function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, ShowPlayerUi)
 	-- Gui to Lua
@@ -27,7 +28,6 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	local TopUI = Instance.new("Frame")
 	local Default_Gradient_3 = Instance.new("UIGradient")
 	local MainText_2 = Instance.new("TextLabel")
-	local ScriptUi = Instance.new("ScrollingFrame")
 	local UIListLayout = Instance.new("UIListLayout")
 	local X = Instance.new("TextButton")
 	local CornerIT_4 = Instance.new("UICorner")
@@ -193,6 +193,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	ScriptUi.BackgroundTransparency = 1.000
 	ScriptUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ScriptUi.BorderSizePixel = 0
+	ScriptUi.Visible = true
 	ScriptUi.Position = UDim2.new(0.0137299765, 0, 0.0784313753, 0)
 	ScriptUi.Size = UDim2.new(0.954233348, 0, 0.834422648, 0)
 
@@ -327,6 +328,18 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainUi.Visible = true
 	MainText_2.Text = mainUiName
 	LoadingUi:Destroy()
+end
+
+function LoadUi:NewButton(NameOfButton, Function)
+	local Button = Instance.new("TextButton", ScriptUi)
+	Button.Font = Enum.Font.RobotoMono.Bold
+	Button.Name = "NewButton"
+	Button.Text = NameOfButton
+	Button.Size = UDim2.new(1, 0,0.028, 0)
+	
+	Button.MouseButton1Up:Connect(function()
+		Function()
+	end)
 end
 
 return LoadUi
