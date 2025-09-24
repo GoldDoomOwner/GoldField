@@ -47,6 +47,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	LoadingUi.BorderSizePixel = 0
 	LoadingUi.Position = UDim2.new(0.424017787, 0, 0.449748755, 0)
 	LoadingUi.Size = UDim2.new(0.151223123, 0, 0.0992462337, 0)
+	LoadingUi.ZIndex = 9999
 
 	Default_Gradient.Color = ColorSequence.new{
 		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
@@ -103,6 +104,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	VersionText.TextSize = 14.000
 	VersionText.TextWrapped = true
 	VersionText.TextXAlignment = Enum.TextXAlignment.Left
+	VersionText.ZIndex = 9999
 
 	MainUi.Name = "MainUi"
 	MainUi.Parent = GoldField
@@ -112,6 +114,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainUi.Position = UDim2.new(0.338028163, 0, 0.180904523, 0)
 	MainUi.Size = UDim2.new(0.323943675, 0, 0.576633155, 0)
 	MainUi.Visible = false
+	MainUi.ZIndex = 9999
 
 	CornerIT_2.CornerRadius = UDim.new(0, 16)
 	CornerIT_2.Name = "CornerIT"
