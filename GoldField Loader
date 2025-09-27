@@ -1,12 +1,18 @@
--- GoldField UI Loader Script
+-- GoldField UI Loader Script with Tabs
 local plr = game.Players.LocalPlayer
 
 local LoadUi = {}
 local ScriptUi = nil
+local TabContainer = nil
+local CurrentTab = nil
+local Tabs = {}
 
 function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, ShowPlayerUi)
-	-- Reset ScriptUi for new window
+	-- Reset variables for new window
 	ScriptUi = nil
+	TabContainer = nil
+	CurrentTab = nil
+	Tabs = {}
 	
 	-- Create all instances first
 	local GoldField = Instance.new("ScreenGui")
@@ -26,11 +32,11 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	local TopUI = Instance.new("Frame")
 	local Default_Gradient_3 = Instance.new("UIGradient")
 	local MainText_2 = Instance.new("TextLabel")
-	local UIListLayout = Instance.new("UIListLayout")
 	local X = Instance.new("TextButton")
 	local CornerIT_4 = Instance.new("UICorner")
 
-	-- Create ScrollingFrame for ScriptUi AFTER other instances
+	-- Create TabContainer and main content area
+	TabContainer = Instance.new("Frame")
 	ScriptUi = Instance.new("ScrollingFrame")
 
 	-- Set up main ScreenGui
@@ -203,6 +209,25 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainText_2.TextWrapped = true
 	MainText_2.TextXAlignment = Enum.TextXAlignment.Left
 
+	-- Tab Container (for tab buttons)
+	TabContainer.Name = "TabContainer"
+	TabContainer.Parent = MainUi
+	TabContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	TabContainer.BorderSizePixel = 0
+	TabContainer.Position = UDim2.new(0, 0, 0.0634983182, 0)
+	TabContainer.Size = UDim2.new(1, 0, 0, 35)
+
+	local tabLayout = Instance.new("UIListLayout")
+	tabLayout.Parent = TabContainer
+	tabLayout.FillDirection = Enum.FillDirection.Horizontal
+	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	tabLayout.Padding = UDim.new(0, 2)
+
+	local tabPadding = Instance.new("UIPadding")
+	tabPadding.Parent = TabContainer
+	tabPadding.PaddingAll = UDim.new(0, 2)
+
+	-- Main Content Area (adjusted for tabs)
 	ScriptUi.Name = "ScriptUi"
 	ScriptUi.Parent = MainUi
 	ScriptUi.Active = true
@@ -210,12 +235,14 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	ScriptUi.BackgroundTransparency = 1.000
 	ScriptUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ScriptUi.BorderSizePixel = 0
-	ScriptUi.Position = UDim2.new(0.0137299765, 0, 0.0784313753, 0)
-	ScriptUi.Size = UDim2.new(0.954233348, 0, 0.834422648, 0)
+	ScriptUi.Position = UDim2.new(0.0137299765, 0, 0.15, 0) -- Adjusted for tab container
+	ScriptUi.Size = UDim2.new(0.954233348, 0, 0.77, 0) -- Adjusted height
 	ScriptUi.CanvasSize = UDim2.new(0, 0, 0, 0)
 	ScriptUi.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	ScriptUi.ScrollBarThickness = 4
+	ScriptUi.Visible = false -- Initially hidden until first tab is created
 
+	local UIListLayout = Instance.new("UIListLayout")
 	UIListLayout.Parent = ScriptUi
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Padding = UDim.new(0, 2)
@@ -283,6 +310,9 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	X.Activated:Connect(function()
 		GoldField:Destroy()
 		ScriptUi = nil
+		TabContainer = nil
+		CurrentTab = nil
+		Tabs = {}
 	end)
 
 	-- Loading sequence
@@ -303,14 +333,115 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	return LoadUi
 end
 
-function LoadUi:NewButton(NameOfButton, ButtonFunction)
-	if not ScriptUi or not ScriptUi.Parent then
-		warn("LoadUi:NewButton() - No window created yet. Call LoadWindow() first.")
+function LoadUi:NewTab(TabName)
+	if not TabContainer or not TabContainer.Parent then
+		warn("LoadUi:NewTab() - No window created yet. Call LoadWindow() first.")
+		return nil
+	end
+
+	local TabFrame = Instance.new("ScrollingFrame")
+	TabFrame.Name = "Tab_" .. tostring(TabName)
+	TabFrame.Parent = ScriptUi.Parent
+	TabFrame.Active = true
+	TabFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TabFrame.BackgroundTransparency = 1.000
+	TabFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TabFrame.BorderSizePixel = 0
+	TabFrame.Position = UDim2.new(0.0137299765, 0, 0.15, 0)
+	TabFrame.Size = UDim2.new(0.954233348, 0, 0.77, 0)
+	TabFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+	TabFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	TabFrame.ScrollBarThickness = 4
+	TabFrame.Visible = false
+
+	local TabLayout = Instance.new("UIListLayout")
+	TabLayout.Parent = TabFrame
+	TabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	TabLayout.Padding = UDim.new(0, 2)
+
+	-- Create tab button
+	local TabButton = Instance.new("TextButton")
+	TabButton.Name = "TabButton_" .. tostring(TabName)
+	TabButton.Parent = TabContainer
+	TabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	TabButton.BorderSizePixel = 0
+	TabButton.Size = UDim2.new(0, 100, 1, -4)
+	TabButton.Font = Enum.Font.RobotoMono
+	TabButton.Text = tostring(TabName or "Tab")
+	TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+	TabButton.TextSize = 12
+	TabButton.TextScaled = true
+
+	local tabCorner = Instance.new("UICorner")
+	tabCorner.CornerRadius = UDim.new(0, 5)
+	tabCorner.Parent = TabButton
+
+	-- Tab switching functionality
+	TabButton.MouseButton1Click:Connect(function()
+		-- Hide all tabs
+		for _, tab in pairs(Tabs) do
+			tab.Frame.Visible = false
+			tab.Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+			tab.Button.TextColor3 = Color3.fromRGB(200, 200, 200)
+		end
+		
+		-- Show selected tab
+		TabFrame.Visible = true
+		TabButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		
+		-- Update current tab reference
+		CurrentTab = TabFrame
+		ScriptUi = TabFrame
+	end)
+
+	-- Store tab info
+	local tabInfo = {
+		Frame = TabFrame,
+		Button = TabButton,
+		Name = TabName
+	}
+	table.insert(Tabs, tabInfo)
+
+	-- If this is the first tab, make it active
+	if #Tabs == 1 then
+		TabFrame.Visible = true
+		TabButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		CurrentTab = TabFrame
+		ScriptUi = TabFrame
+	end
+
+	return {
+		Frame = TabFrame,
+		Button = TabButton,
+		NewButton = function(self, NameOfButton, ButtonFunction)
+			return LoadUi:NewButton(NameOfButton, ButtonFunction, TabFrame)
+		end,
+		NewText = function(self, Text)
+			return LoadUi:NewText(Text, TabFrame)
+		end,
+		NewToggle = function(self, ToggleName, DefaultState, ToggleFunction)
+			return LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TabFrame)
+		end,
+		NewDropdown = function(self, DropdownName, Options, DefaultOption, SelectFunction)
+			return LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction, TabFrame)
+		end,
+		NewDivider = function(self)
+			return LoadUi:NewDivider(TabFrame)
+		end
+	}
+end
+
+function LoadUi:NewButton(NameOfButton, ButtonFunction, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewButton() - No valid target frame.")
 		return nil
 	end
 
 	local Button = Instance.new("TextButton")
-	Button.Parent = ScriptUi
+	Button.Parent = targetFrame
 	Button.Font = Enum.Font.RobotoMono
 	Button.Name = "NewButton"
 	Button.Text = tostring(NameOfButton or "Button")
@@ -351,15 +482,16 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction)
 	return Button
 end
 
-function LoadUi:NewText(Text)
-	if not ScriptUi or not ScriptUi.Parent then
-		warn("LoadUi:NewText() - No window created yet. Call LoadWindow() first.")
+function LoadUi:NewText(Text, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewText() - No valid target frame.")
 		return nil
 	end
 
 	local TextLabel = Instance.new("TextLabel")
 	TextLabel.BackgroundTransparency = 1
-	TextLabel.Parent = ScriptUi
+	TextLabel.Parent = targetFrame
 	TextLabel.Font = Enum.Font.RobotoMono
 	TextLabel.Name = "NewText"
 	TextLabel.Text = tostring(Text or "Text")
@@ -376,14 +508,15 @@ function LoadUi:NewText(Text)
 	return TextLabel
 end
 
-function LoadUi:NewDivider()
-	if not ScriptUi or not ScriptUi.Parent then
-		warn("LoadUi:NewDivider() - No window created yet. Call LoadWindow() first.")
+function LoadUi:NewDivider(TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewDivider() - No valid target frame.")
 		return nil
 	end
 
 	local DividerFrame = Instance.new("Frame")
-	DividerFrame.Parent = ScriptUi
+	DividerFrame.Parent = targetFrame
 	DividerFrame.Name = "NewDivider"
 	DividerFrame.Size = UDim2.new(1, -20, 0, 10)
 	DividerFrame.BackgroundTransparency = 1
@@ -400,16 +533,17 @@ function LoadUi:NewDivider()
 	return DividerFrame
 end
 
-function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction)
-	if not ScriptUi or not ScriptUi.Parent then
-		warn("LoadUi:NewToggle() - No window created yet. Call LoadWindow() first.")
+function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewToggle() - No valid target frame.")
 		return nil
 	end
 
 	local ToggleState = DefaultState or false
 	
 	local ToggleFrame = Instance.new("Frame")
-	ToggleFrame.Parent = ScriptUi
+	ToggleFrame.Parent = targetFrame
 	ToggleFrame.Name = "NewToggle"
 	ToggleFrame.Size = UDim2.new(1, -10, 0, 30)
 	ToggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -503,9 +637,10 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction)
 	}
 end
 
-function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction)
-	if not ScriptUi or not ScriptUi.Parent then
-		warn("LoadUi:NewDropdown() - No window created yet. Call LoadWindow() first.")
+function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewDropdown() - No valid target frame.")
 		return nil
 	end
 
@@ -514,7 +649,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 	local IsOpen = false
 
 	local DropdownFrame = Instance.new("Frame")
-	DropdownFrame.Parent = ScriptUi
+	DropdownFrame.Parent = targetFrame
 	DropdownFrame.Name = "NewDropdown"
 	DropdownFrame.Size = UDim2.new(1, -10, 0, 30)
 	DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
