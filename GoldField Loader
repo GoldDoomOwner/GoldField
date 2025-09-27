@@ -429,6 +429,9 @@ function LoadUi:NewTab(TabName)
 		end,
 		NewDivider = function(self)
 			return LoadUi:NewDivider(TabFrame)
+		end,
+		NewTextInput = function(self, InputName, PlaceholderText, InputCallback)
+			return LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TabFrame)
 		end
 	}
 end
@@ -775,6 +778,96 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 			table.insert(OptionsTable, option)
 			-- Recreate options (simplified approach)
 		end
+	}
+end
+
+function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewTextInput() - No valid target frame.")
+		return nil
+	end
+
+	local InputFrame = Instance.new("Frame")
+	InputFrame.Parent = targetFrame
+	InputFrame.Name = "NewTextInput"
+	InputFrame.Size = UDim2.new(1, -10, 0, 50)
+	InputFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	InputFrame.BorderSizePixel = 0
+
+	local inputCorner = Instance.new("UICorner")
+	inputCorner.CornerRadius = UDim.new(0, 5)
+	inputCorner.Parent = InputFrame
+
+	local InputLabel = Instance.new("TextLabel")
+	InputLabel.Parent = InputFrame
+	InputLabel.Name = "Label"
+	InputLabel.BackgroundTransparency = 1
+	InputLabel.Position = UDim2.new(0, 10, 0, 5)
+	InputLabel.Size = UDim2.new(1, -20, 0, 15)
+	InputLabel.Font = Enum.Font.RobotoMono
+	InputLabel.Text = tostring(InputName or "Text Input")
+	InputLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+	InputLabel.TextSize = 12
+	InputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local TextBox = Instance.new("TextBox")
+	TextBox.Parent = InputFrame
+	TextBox.Name = "TextBox"
+	TextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	TextBox.BorderSizePixel = 1
+	TextBox.BorderColor3 = Color3.fromRGB(60, 60, 60)
+	TextBox.Position = UDim2.new(0, 10, 0, 22)
+	TextBox.Size = UDim2.new(1, -20, 0, 23)
+	TextBox.Font = Enum.Font.RobotoMono
+	TextBox.Text = ""
+	TextBox.PlaceholderText = tostring(PlaceholderText or "Enter text...")
+	TextBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
+	TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TextBox.TextSize = 11
+	TextBox.TextXAlignment = Enum.TextXAlignment.Left
+
+	local textBoxCorner = Instance.new("UICorner")
+	textBoxCorner.CornerRadius = UDim.new(0, 3)
+	textBoxCorner.Parent = TextBox
+
+	local textBoxPadding = Instance.new("UIPadding")
+	textBoxPadding.PaddingLeft = UDim.new(0, 8)
+	textBoxPadding.PaddingRight = UDim.new(0, 8)
+	textBoxPadding.Parent = TextBox
+
+	-- TextBox functionality
+	TextBox.FocusLost:Connect(function(enterPressed)
+		if InputCallback and enterPressed then
+			local success, err = pcall(function()
+				if type(InputCallback) == "function" then
+					InputCallback(TextBox.Text)
+				elseif type(InputCallback) == "string" then
+					loadstring(InputCallback)(TextBox.Text)
+				end
+			end)
+			
+			if not success then
+				warn("TextInput callback error:", err)
+			end
+		end
+	end)
+
+	-- Focus animations
+	TextBox.Focused:Connect(function()
+		TextBox.BorderColor3 = Color3.fromRGB(100, 100, 100)
+	end)
+
+	TextBox.FocusLost:Connect(function()
+		TextBox.BorderColor3 = Color3.fromRGB(60, 60, 60)
+	end)
+
+	return {
+		Frame = InputFrame,
+		TextBox = TextBox,
+		GetText = function() return TextBox.Text end,
+		SetText = function(text) TextBox.Text = tostring(text) end,
+		Clear = function() TextBox.Text = "" end
 	}
 end
 
