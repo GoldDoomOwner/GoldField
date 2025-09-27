@@ -225,7 +225,10 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 
 	local tabPadding = Instance.new("UIPadding")
 	tabPadding.Parent = TabContainer
-	tabPadding.PaddingAll = UDim.new(0, 2)
+	tabPadding.PaddingTop = UDim.new(0, 2)
+	tabPadding.PaddingBottom = UDim.new(0, 2)
+	tabPadding.PaddingLeft = UDim.new(0, 2)
+	tabPadding.PaddingRight = UDim.new(0, 2)
 
 	-- Main Content Area (adjusted for tabs)
 	ScriptUi.Name = "ScriptUi"
