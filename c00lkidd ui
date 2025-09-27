@@ -1,4 +1,4 @@
--- CoolKidd GUI Library
+-- CoolKidd GUI Library - Exploit Style
 -- Place this in ReplicatedStorage as a ModuleScript
 
 local TweenService = game:GetService("TweenService")
@@ -16,78 +16,76 @@ Window.__index = Window
 function Window:NewTab(tabSettings)
     tabSettings = tabSettings or {}
     local tabName = tabSettings.Name or "New Tab"
-    local tabIcon = tabSettings.Icon or "📄"
     
     local tab = {
         Name = tabName,
-        Icon = tabIcon,
         Elements = {},
         Frame = nil,
         Active = false
     }
     
-    -- Create tab frame
+    -- Create tab frame with grid layout
     local tabFrame = Instance.new("ScrollingFrame")
     tabFrame.Name = "Tab_" .. tabName
     tabFrame.Size = UDim2.new(1, 0, 1, -40)
     tabFrame.Position = UDim2.new(0, 0, 0, 40)
-    tabFrame.BackgroundTransparency = 1
-    tabFrame.BorderSizePixel = 0
-    tabFrame.ScrollBarThickness = 6
-    tabFrame.ScrollBarImageColor3 = Color3.fromRGB(155, 89, 182)
+    tabFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    tabFrame.BorderSizePixel = 1
+    tabFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+    tabFrame.ScrollBarThickness = 8
+    tabFrame.ScrollBarImageColor3 = Color3.fromRGB(255, 0, 0)
     tabFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
     tabFrame.Visible = false
     tabFrame.Parent = self.ContentFrame
     
-    local tabLayout = Instance.new("UIListLayout")
-    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    tabLayout.Padding = UDim.new(0, 5)
-    tabLayout.Parent = tabFrame
+    -- Grid layout for buttons
+    local gridLayout = Instance.new("UIGridLayout")
+    gridLayout.CellSize = UDim2.new(0, 180, 0, 35)
+    gridLayout.CellPadding = UDim2.new(0, 5, 0, 5)
+    gridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    gridLayout.StartCorner = Enum.StartCorner.TopLeft
+    gridLayout.FillDirection = Enum.FillDirection.Horizontal
+    gridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+    gridLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+    gridLayout.Parent = tabFrame
     
     local tabPadding = Instance.new("UIPadding")
-    tabPadding.PaddingTop = UDim.new(0, 10)
-    tabPadding.PaddingBottom = UDim.new(0, 10)
-    tabPadding.PaddingLeft = UDim.new(0, 10)
-    tabPadding.PaddingRight = UDim.new(0, 10)
+    tabPadding.PaddingTop = UDim.new(0, 8)
+    tabPadding.PaddingBottom = UDim.new(0, 8)
+    tabPadding.PaddingLeft = UDim.new(0, 8)
+    tabPadding.PaddingRight = UDim.new(0, 8)
     tabPadding.Parent = tabFrame
     
     tab.Frame = tabFrame
     
-    -- Create tab button
+    -- Create tab button in header
     local tabButton = Instance.new("TextButton")
     tabButton.Name = "TabButton_" .. tabName
-    tabButton.Size = UDim2.new(0, 120, 1, 0)
-    tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
-    tabButton.BorderSizePixel = 0
-    tabButton.Text = tabIcon .. " " .. tabName
-    tabButton.TextColor3 = Color3.new(0.8, 0.8, 0.8)
-    tabButton.TextScaled = true
-    tabButton.Font = Enum.Font.Gotham
+    tabButton.Size = UDim2.new(0, 100, 1, -4)
+    tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    tabButton.BorderSizePixel = 1
+    tabButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+    tabButton.Text = tabName
+    tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tabButton.TextSize = 12
+    tabButton.Font = Enum.Font.Arial
     tabButton.Parent = self.TabContainer
-    
-    local tabCorner = Instance.new("UICorner")
-    tabCorner.CornerRadius = UDim.new(0, 5)
-    tabCorner.Parent = tabButton
     
     -- Tab button functionality
     tabButton.MouseButton1Click:Connect(function()
         self:SwitchToTab(#self.Tabs + 1)
     end)
     
-    -- Add hover effect
+    -- Hover effect
     tabButton.MouseEnter:Connect(function()
         if not tab.Active then
-            TweenService:Create(tabButton, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(60, 60, 100)
-            }):Play()
+            tabButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         end
     end)
     
     tabButton.MouseLeave:Connect(function()
         if not tab.Active then
-            TweenService:Create(tabButton, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(40, 40, 70)
-            }):Play()
+            tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         end
     end)
     
@@ -97,45 +95,38 @@ function Window:NewTab(tabSettings)
         local buttonName = buttonSettings.Name or "Button"
         local buttonCallback = buttonSettings.Callback or function() end
         
-        local buttonFrame = Instance.new("Frame")
-        buttonFrame.Name = "ButtonFrame"
-        buttonFrame.Size = UDim2.new(1, 0, 0, 35)
-        buttonFrame.BackgroundTransparency = 1
-        buttonFrame.Parent = tabFrame
-        
         local button = Instance.new("TextButton")
-        button.Name = "Button"
-        button.Size = UDim2.new(1, 0, 1, 0)
-        button.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
-        button.BorderSizePixel = 0
+        button.Name = "ExploitButton"
+        button.Size = UDim2.new(0, 180, 0, 35)
+        button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        button.BorderSizePixel = 1
+        button.BorderColor3 = Color3.fromRGB(255, 0, 0)
         button.Text = buttonName
-        button.TextColor3 = Color3.new(1, 1, 1)
-        button.TextScaled = true
-        button.Font = Enum.Font.GothamBold
-        button.Parent = buttonFrame
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.TextSize = 11
+        button.Font = Enum.Font.Arial
+        button.Parent = tabFrame
         
-        local buttonCorner = Instance.new("UICorner")
-        buttonCorner.CornerRadius = UDim.new(0, 5)
-        buttonCorner.Parent = button
-        
-        local buttonGradient = Instance.new("UIGradient")
-        buttonGradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(52, 152, 219)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(93, 173, 226))
+        -- Red gradient background
+        local gradient = Instance.new("UIGradient")
+        gradient.Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 10, 10)),
+            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(30, 30, 30)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 10, 10))
         }
-        buttonGradient.Rotation = 45
-        buttonGradient.Parent = button
+        gradient.Rotation = 90
+        gradient.Parent = button
         
         -- Button functionality
         button.MouseButton1Click:Connect(function()
-            -- Click animation
-            local clickTween = TweenService:Create(button, TweenInfo.new(0.1), {
-                Size = UDim2.new(0.95, 0, 0.9, 0)
+            -- Flash effect
+            local flash = TweenService:Create(button, TweenInfo.new(0.1), {
+                BackgroundColor3 = Color3.fromRGB(255, 0, 0)
             })
-            clickTween:Play()
-            clickTween.Completed:Connect(function()
+            flash:Play()
+            flash.Completed:Connect(function()
                 TweenService:Create(button, TweenInfo.new(0.1), {
-                    Size = UDim2.new(1, 0, 1, 0)
+                    BackgroundColor3 = Color3.fromRGB(30, 30, 30)
                 }):Play()
             end)
             
@@ -144,15 +135,13 @@ function Window:NewTab(tabSettings)
         
         -- Hover effects
         button.MouseEnter:Connect(function()
-            TweenService:Create(button, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(41, 128, 185)
-            }):Play()
+            button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            button.BorderColor3 = Color3.fromRGB(255, 100, 100)
         end)
         
         button.MouseLeave:Connect(function()
-            TweenService:Create(button, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(52, 152, 219)
-            }):Play()
+            button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            button.BorderColor3 = Color3.fromRGB(255, 0, 0)
         end)
         
         self:UpdateCanvasSize()
@@ -167,7 +156,7 @@ function Window:NewTab(tabSettings)
         
         local inputFrame = Instance.new("Frame")
         inputFrame.Name = "InputFrame"
-        inputFrame.Size = UDim2.new(1, 0, 0, 60)
+        inputFrame.Size = UDim2.new(0, 370, 0, 60)
         inputFrame.BackgroundTransparency = 1
         inputFrame.Parent = tabFrame
         
@@ -177,9 +166,9 @@ function Window:NewTab(tabSettings)
         label.Position = UDim2.new(0, 0, 0, 0)
         label.BackgroundTransparency = 1
         label.Text = inputName
-        label.TextColor3 = Color3.fromRGB(155, 89, 182)
-        label.TextScaled = true
-        label.Font = Enum.Font.GothamBold
+        label.TextColor3 = Color3.fromRGB(255, 0, 0)
+        label.TextSize = 12
+        label.Font = Enum.Font.Arial
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.Parent = inputFrame
         
@@ -187,25 +176,21 @@ function Window:NewTab(tabSettings)
         textBox.Name = "TextBox"
         textBox.Size = UDim2.new(1, 0, 0, 30)
         textBox.Position = UDim2.new(0, 0, 0, 25)
-        textBox.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
+        textBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
         textBox.BorderSizePixel = 1
-        textBox.BorderColor3 = Color3.fromRGB(155, 89, 182)
+        textBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
         textBox.Text = ""
         textBox.PlaceholderText = placeholder
-        textBox.PlaceholderColor3 = Color3.fromRGB(136, 136, 136)
-        textBox.TextColor3 = Color3.new(1, 1, 1)
-        textBox.TextScaled = true
-        textBox.Font = Enum.Font.Gotham
+        textBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+        textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+        textBox.TextSize = 11
+        textBox.Font = Enum.Font.Arial
         textBox.TextXAlignment = Enum.TextXAlignment.Left
         textBox.Parent = inputFrame
         
-        local textBoxCorner = Instance.new("UICorner")
-        textBoxCorner.CornerRadius = UDim.new(0, 5)
-        textBoxCorner.Parent = textBox
-        
         local textBoxPadding = Instance.new("UIPadding")
-        textBoxPadding.PaddingLeft = UDim.new(0, 10)
-        textBoxPadding.PaddingRight = UDim.new(0, 10)
+        textBoxPadding.PaddingLeft = UDim.new(0, 5)
+        textBoxPadding.PaddingRight = UDim.new(0, 5)
         textBoxPadding.Parent = textBox
         
         -- TextBox functionality
@@ -217,17 +202,13 @@ function Window:NewTab(tabSettings)
         
         -- Focus animations
         textBox.Focused:Connect(function()
-            TweenService:Create(textBox, TweenInfo.new(0.2), {
-                BorderColor3 = Color3.fromRGB(93, 173, 226),
-                BackgroundColor3 = Color3.fromRGB(50, 50, 90)
-            }):Play()
+            textBox.BorderColor3 = Color3.fromRGB(255, 100, 100)
+            textBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         end)
         
         textBox.FocusLost:Connect(function()
-            TweenService:Create(textBox, TweenInfo.new(0.2), {
-                BorderColor3 = Color3.fromRGB(155, 89, 182),
-                BackgroundColor3 = Color3.fromRGB(40, 40, 70)
-            }):Play()
+            textBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+            textBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
         end)
         
         self:UpdateCanvasSize()
@@ -240,92 +221,57 @@ function Window:NewTab(tabSettings)
         local toggleDefault = toggleSettings.Default or false
         local toggleCallback = toggleSettings.Callback or function() end
         
-        local toggleFrame = Instance.new("Frame")
-        toggleFrame.Name = "ToggleFrame"
-        toggleFrame.Size = UDim2.new(1, 0, 0, 35)
-        toggleFrame.BackgroundTransparency = 1
-        toggleFrame.Parent = tabFrame
-        
         local toggleButton = Instance.new("TextButton")
         toggleButton.Name = "ToggleButton"
-        toggleButton.Size = UDim2.new(1, 0, 1, 0)
-        toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
+        toggleButton.Size = UDim2.new(0, 180, 0, 35)
+        toggleButton.BackgroundColor3 = toggleDefault and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(30, 30, 30)
         toggleButton.BorderSizePixel = 1
-        toggleButton.BorderColor3 = Color3.fromRGB(100, 100, 120)
-        toggleButton.Text = ""
-        toggleButton.Parent = toggleFrame
-        
-        local toggleCorner = Instance.new("UICorner")
-        toggleCorner.CornerRadius = UDim.new(0, 5)
-        toggleCorner.Parent = toggleButton
-        
-        local toggleLabel = Instance.new("TextLabel")
-        toggleLabel.Name = "Label"
-        toggleLabel.Size = UDim2.new(0.8, 0, 1, 0)
-        toggleLabel.Position = UDim2.new(0, 10, 0, 0)
-        toggleLabel.BackgroundTransparency = 1
-        toggleLabel.Text = toggleName
-        toggleLabel.TextColor3 = Color3.new(1, 1, 1)
-        toggleLabel.TextScaled = true
-        toggleLabel.Font = Enum.Font.Gotham
-        toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        toggleLabel.Parent = toggleButton
-        
-        local toggleSwitch = Instance.new("Frame")
-        toggleSwitch.Name = "Switch"
-        toggleSwitch.Size = UDim2.new(0, 50, 0, 20)
-        toggleSwitch.Position = UDim2.new(1, -60, 0.5, -10)
-        toggleSwitch.BackgroundColor3 = toggleDefault and Color3.fromRGB(39, 174, 96) or Color3.fromRGB(100, 100, 100)
-        toggleSwitch.BorderSizePixel = 0
-        toggleSwitch.Parent = toggleButton
-        
-        local switchCorner = Instance.new("UICorner")
-        switchCorner.CornerRadius = UDim.new(0, 10)
-        switchCorner.Parent = toggleSwitch
-        
-        local toggleKnob = Instance.new("Frame")
-        toggleKnob.Name = "Knob"
-        toggleKnob.Size = UDim2.new(0, 16, 0, 16)
-        toggleKnob.Position = toggleDefault and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
-        toggleKnob.BackgroundColor3 = Color3.new(1, 1, 1)
-        toggleKnob.BorderSizePixel = 0
-        toggleKnob.Parent = toggleSwitch
-        
-        local knobCorner = Instance.new("UICorner")
-        knobCorner.CornerRadius = UDim.new(1, 0)
-        knobCorner.Parent = toggleKnob
+        toggleButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+        toggleButton.Text = (toggleDefault and "✓ " or "✗ ") .. toggleName
+        toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        toggleButton.TextSize = 11
+        toggleButton.Font = Enum.Font.Arial
+        toggleButton.Parent = tabFrame
         
         local toggleState = toggleDefault
+        
+        -- Gradient for toggle
+        local gradient = Instance.new("UIGradient")
+        gradient.Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, toggleState and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(50, 10, 10)),
+            ColorSequenceKeypoint.new(0.5, toggleState and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(30, 30, 30)),
+            ColorSequenceKeypoint.new(1, toggleState and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(50, 10, 10))
+        }
+        gradient.Rotation = 90
+        gradient.Parent = toggleButton
         
         -- Toggle functionality
         toggleButton.MouseButton1Click:Connect(function()
             toggleState = not toggleState
             
-            local switchColor = toggleState and Color3.fromRGB(39, 174, 96) or Color3.fromRGB(100, 100, 100)
-            local knobPosition = toggleState and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
+            local newColor = toggleState and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(30, 30, 30)
+            local newText = (toggleState and "✓ " or "✗ ") .. toggleName
             
-            TweenService:Create(toggleSwitch, TweenInfo.new(0.2), {
-                BackgroundColor3 = switchColor
-            }):Play()
+            toggleButton.BackgroundColor3 = newColor
+            toggleButton.Text = newText
             
-            TweenService:Create(toggleKnob, TweenInfo.new(0.2), {
-                Position = knobPosition
-            }):Play()
+            -- Update gradient
+            gradient.Color = ColorSequence.new{
+                ColorSequenceKeypoint.new(0, toggleState and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(50, 10, 10)),
+                ColorSequenceKeypoint.new(0.5, toggleState and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(30, 30, 30)),
+                ColorSequenceKeypoint.new(1, toggleState and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(50, 10, 10))
+            }
             
             toggleCallback(toggleState)
         end)
         
         -- Hover effect
         toggleButton.MouseEnter:Connect(function()
-            TweenService:Create(toggleButton, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(50, 50, 80)
-            }):Play()
+            toggleButton.BorderColor3 = Color3.fromRGB(255, 100, 100)
         end)
         
         toggleButton.MouseLeave:Connect(function()
-            TweenService:Create(toggleButton, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(40, 40, 70)
-            }):Play()
+            toggleButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
         end)
         
         self:UpdateCanvasSize()
@@ -334,28 +280,27 @@ function Window:NewTab(tabSettings)
             GetValue = function() return toggleState end,
             SetValue = function(value)
                 toggleState = value
-                local switchColor = toggleState and Color3.fromRGB(39, 174, 96) or Color3.fromRGB(100, 100, 100)
-                local knobPosition = toggleState and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
+                local newColor = toggleState and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(30, 30, 30)
+                local newText = (toggleState and "✓ " or "✗ ") .. toggleName
                 
-                TweenService:Create(toggleSwitch, TweenInfo.new(0.2), {
-                    BackgroundColor3 = switchColor
-                }):Play()
+                toggleButton.BackgroundColor3 = newColor
+                toggleButton.Text = newText
                 
-                TweenService:Create(toggleKnob, TweenInfo.new(0.2), {
-                    Position = knobPosition
-                }):Play()
+                gradient.Color = ColorSequence.new{
+                    ColorSequenceKeypoint.new(0, toggleState and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(50, 10, 10)),
+                    ColorSequenceKeypoint.new(0.5, toggleState and Color3.fromRGB(0, 100, 0) or Color3.fromRGB(30, 30, 30)),
+                    ColorSequenceKeypoint.new(1, toggleState and Color3.fromRGB(0, 80, 0) or Color3.fromRGB(50, 10, 10))
+                }
             end
         }
     end
     
     function tab:UpdateCanvasSize()
-        local totalHeight = 0
-        for _, child in pairs(tabFrame:GetChildren()) do
-            if child:IsA("GuiObject") and child.Name ~= "UIListLayout" and child.Name ~= "UIPadding" then
-                totalHeight = totalHeight + child.AbsoluteSize.Y + 5
-            end
+        local gridLayout = tabFrame:FindFirstChild("UIGridLayout")
+        if gridLayout then
+            local contentSize = gridLayout.AbsoluteContentSize
+            tabFrame.CanvasSize = UDim2.new(0, 0, 0, contentSize.Y + 20)
         end
-        tabFrame.CanvasSize = UDim2.new(0, 0, 0, totalHeight + 20)
     end
     
     table.insert(self.Tabs, tab)
@@ -376,8 +321,8 @@ function Window:SwitchToTab(tabIndex)
         
         local tabButton = self.TabContainer:FindFirstChild("TabButton_" .. tab.Name)
         if tabButton then
-            tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
-            tabButton.TextColor3 = Color3.new(0.8, 0.8, 0.8)
+            tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         end
     end
     
@@ -388,8 +333,8 @@ function Window:SwitchToTab(tabIndex)
         
         local tabButton = self.TabContainer:FindFirstChild("TabButton_" .. self.Tabs[tabIndex].Name)
         if tabButton then
-            tabButton.BackgroundColor3 = Color3.fromRGB(155, 89, 182)
-            tabButton.TextColor3 = Color3.new(1, 1, 1)
+            tabButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+            tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         end
         
         self.CurrentTab = tabIndex
@@ -421,8 +366,8 @@ end
 -- Main CoolKidd functions
 function CoolKidd.NewWindow(windowSettings)
     windowSettings = windowSettings or {}
-    local windowName = windowSettings.Name or "CoolKidd Window"
-    local windowSize = windowSettings.Size or UDim2.new(0, 500, 0, 400)
+    local windowName = windowSettings.Name or "Exploit GUI"
+    local windowSize = windowSettings.Size or UDim2.new(0, 600, 0, 450)
     
     local window = setmetatable({
         Name = windowName,
@@ -433,7 +378,7 @@ function CoolKidd.NewWindow(windowSettings)
     
     -- Create ScreenGui
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "CoolKidd_" .. windowName
+    screenGui.Name = "ExploitGUI_" .. windowName
     screenGui.ResetOnSpawn = false
     screenGui.DisplayOrder = 999999
     screenGui.Parent = playerGui
@@ -445,143 +390,94 @@ function CoolKidd.NewWindow(windowSettings)
     mainFrame.Name = "MainFrame"
     mainFrame.Size = windowSize
     mainFrame.Position = UDim2.new(0.5, -windowSize.X.Offset/2, 0.5, -windowSize.Y.Offset/2)
-    mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 63)
-    mainFrame.BorderSizePixel = 0
+    mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    mainFrame.BorderSizePixel = 2
+    mainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
     mainFrame.Active = true
     mainFrame.Draggable = true
     mainFrame.Parent = screenGui
     
-    local mainCorner = Instance.new("UICorner")
-    mainCorner.CornerRadius = UDim.new(0, 15)
-    mainCorner.Parent = mainFrame
-    
+    -- Main gradient
     local mainGradient = Instance.new("UIGradient")
     mainGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 63)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 42, 90))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 35, 35)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(25, 25, 25)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 15, 15))
     }
-    mainGradient.Rotation = 145
+    mainGradient.Rotation = 135
     mainGradient.Parent = mainFrame
-    
-    -- Border effect
-    local borderFrame = Instance.new("Frame")
-    borderFrame.Size = UDim2.new(1, 4, 1, 4)
-    borderFrame.Position = UDim2.new(0, -2, 0, -2)
-    borderFrame.BackgroundColor3 = Color3.fromRGB(74, 74, 138)
-    borderFrame.BorderSizePixel = 0
-    borderFrame.ZIndex = mainFrame.ZIndex - 1
-    borderFrame.Parent = mainFrame
-    
-    local borderCorner = Instance.new("UICorner")
-    borderCorner.CornerRadius = UDim.new(0, 17)
-    borderCorner.Parent = borderFrame
     
     -- Header
     local header = Instance.new("Frame")
     header.Name = "Header"
-    header.Size = UDim2.new(1, 0, 0, 50)
+    header.Size = UDim2.new(1, 0, 0, 40)
     header.Position = UDim2.new(0, 0, 0, 0)
-    header.BackgroundColor3 = Color3.fromRGB(106, 76, 147)
-    header.BorderSizePixel = 0
+    header.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+    header.BorderSizePixel = 1
+    header.BorderColor3 = Color3.fromRGB(255, 50, 50)
     header.Parent = mainFrame
-    
-    local headerCorner = Instance.new("UICorner")
-    headerCorner.CornerRadius = UDim.new(0, 15)
-    headerCorner.Parent = header
     
     local headerGradient = Instance.new("UIGradient")
     headerGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(106, 76, 147)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(155, 89, 182))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 0, 0)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 0, 0))
     }
     headerGradient.Rotation = 90
     headerGradient.Parent = header
     
-    -- Fix header corners
-    local headerBottomCover = Instance.new("Frame")
-    headerBottomCover.Size = UDim2.new(1, 0, 0, 15)
-    headerBottomCover.Position = UDim2.new(0, 0, 1, -15)
-    headerBottomCover.BackgroundColor3 = Color3.fromRGB(155, 89, 182)
-    headerBottomCover.BorderSizePixel = 0
-    headerBottomCover.Parent = header
-    
     -- Title
     local title = Instance.new("TextLabel")
     title.Name = "Title"
-    title.Size = UDim2.new(1, -100, 1, 0)
-    title.Position = UDim2.new(0, 10, 0, 0)
+    title.Size = UDim2.new(1, -50, 1, 0)
+    title.Position = UDim2.new(0, 5, 0, 0)
     title.BackgroundTransparency = 1
     title.Text = windowName
-    title.TextColor3 = Color3.new(1, 1, 1)
-    title.TextScaled = true
-    title.Font = Enum.Font.GothamBold
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextSize = 14
+    title.Font = Enum.Font.ArialBold
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.Parent = header
-    
-    -- Tab navigation arrows
-    local leftArrow = Instance.new("TextButton")
-    leftArrow.Name = "LeftArrow"
-    leftArrow.Size = UDim2.new(0, 30, 0, 30)
-    leftArrow.Position = UDim2.new(1, -90, 0.5, -15)
-    leftArrow.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
-    leftArrow.Text = "◀"
-    leftArrow.TextColor3 = Color3.new(1, 1, 1)
-    leftArrow.TextScaled = true
-    leftArrow.Font = Enum.Font.GothamBold
-    leftArrow.BorderSizePixel = 0
-    leftArrow.Parent = header
-    
-    local leftCorner = Instance.new("UICorner")
-    leftCorner.CornerRadius = UDim.new(0, 5)
-    leftCorner.Parent = leftArrow
-    
-    local rightArrow = Instance.new("TextButton")
-    rightArrow.Name = "RightArrow"
-    rightArrow.Size = UDim2.new(0, 30, 0, 30)
-    rightArrow.Position = UDim2.new(1, -55, 0.5, -15)
-    rightArrow.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
-    rightArrow.Text = "▶"
-    rightArrow.TextColor3 = Color3.new(1, 1, 1)
-    rightArrow.TextScaled = true
-    rightArrow.Font = Enum.Font.GothamBold
-    rightArrow.BorderSizePixel = 0
-    rightArrow.Parent = header
-    
-    local rightCorner = Instance.new("UICorner")
-    rightCorner.CornerRadius = UDim.new(0, 5)
-    rightCorner.Parent = rightArrow
     
     -- Close Button
     local closeButton = Instance.new("TextButton")
     closeButton.Name = "CloseButton"
-    closeButton.Size = UDim2.new(0, 25, 0, 25)
-    closeButton.Position = UDim2.new(1, -35, 0, 12.5)
-    closeButton.BackgroundColor3 = Color3.fromRGB(255, 71, 87)
-    closeButton.Text = "×"
-    closeButton.TextColor3 = Color3.new(1, 1, 1)
-    closeButton.TextScaled = true
-    closeButton.Font = Enum.Font.GothamBold
-    closeButton.BorderSizePixel = 0
+    closeButton.Size = UDim2.new(0, 30, 0, 30)
+    closeButton.Position = UDim2.new(1, -35, 0, 5)
+    closeButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+    closeButton.BorderSizePixel = 1
+    closeButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+    closeButton.Text = "X"
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.TextSize = 16
+    closeButton.Font = Enum.Font.ArialBold
     closeButton.Parent = header
     
-    local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(1, 0)
-    closeCorner.Parent = closeButton
-    
-    -- Tab Container (hidden, for storing tab buttons)
+    -- Tab Container
     local tabContainer = Instance.new("Frame")
     tabContainer.Name = "TabContainer"
-    tabContainer.Size = UDim2.new(1, 0, 0, 0)
-    tabContainer.Position = UDim2.new(0, 0, 0, 50)
-    tabContainer.BackgroundTransparency = 1
-    tabContainer.Visible = false
+    tabContainer.Size = UDim2.new(1, 0, 0, 30)
+    tabContainer.Position = UDim2.new(0, 0, 0, 40)
+    tabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    tabContainer.BorderSizePixel = 1
+    tabContainer.BorderColor3 = Color3.fromRGB(255, 0, 0)
     tabContainer.Parent = mainFrame
+    
+    local tabLayout = Instance.new("UIListLayout")
+    tabLayout.FillDirection = Enum.FillDirection.Horizontal
+    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    tabLayout.Padding = UDim.new(0, 2)
+    tabLayout.Parent = tabContainer
+    
+    local tabPadding = Instance.new("UIPadding")
+    tabPadding.PaddingAll = UDim.new(0, 2)
+    tabPadding.Parent = tabContainer
     
     -- Content Frame
     local contentFrame = Instance.new("Frame")
     contentFrame.Name = "ContentFrame"
-    contentFrame.Size = UDim2.new(1, 0, 1, -50)
-    contentFrame.Position = UDim2.new(0, 0, 0, 50)
+    contentFrame.Size = UDim2.new(1, 0, 1, -70)
+    contentFrame.Position = UDim2.new(0, 0, 0, 70)
     contentFrame.BackgroundTransparency = 1
     contentFrame.Parent = mainFrame
     
@@ -589,51 +485,19 @@ function CoolKidd.NewWindow(windowSettings)
     window.ContentFrame = contentFrame
     window.TabContainer = tabContainer
     
-    -- Arrow functionality
-    leftArrow.MouseButton1Click:Connect(function()
-        window:PreviousTab()
-    end)
-    
-    rightArrow.MouseButton1Click:Connect(function()
-        window:NextTab()
-    end)
-    
     -- Close button functionality
     closeButton.MouseButton1Click:Connect(function()
-        local closeTween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back), {
-            Size = UDim2.new(0, 0, 0, 0)
-        })
-        closeTween:Play()
-        closeTween.Completed:Connect(function()
-            window:Destroy()
-        end)
+        window:Destroy()
     end)
     
     -- Hover effects
-    local function addHoverEffect(button, hoverColor, originalColor)
-        button.MouseEnter:Connect(function()
-            TweenService:Create(button, TweenInfo.new(0.2), {
-                BackgroundColor3 = hoverColor
-            }):Play()
-        end)
-        
-        button.MouseLeave:Connect(function()
-            TweenService:Create(button, TweenInfo.new(0.2), {
-                BackgroundColor3 = originalColor
-            }):Play()
-        end)
-    end
+    closeButton.MouseEnter:Connect(function()
+        closeButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+    end)
     
-    addHoverEffect(leftArrow, Color3.fromRGB(70, 70, 100), Color3.fromRGB(50, 50, 80))
-    addHoverEffect(rightArrow, Color3.fromRGB(70, 70, 100), Color3.fromRGB(50, 50, 80))
-    addHoverEffect(closeButton, Color3.fromRGB(255, 55, 66), Color3.fromRGB(255, 71, 87))
-    
-    -- Opening animation
-    mainFrame.Size = UDim2.new(0, 0, 0, 0)
-    local openTween = TweenService:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {
-        Size = windowSize
-    })
-    openTween:Play()
+    closeButton.MouseLeave:Connect(function()
+        closeButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+    end)
     
     return window
 end
