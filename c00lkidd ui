@@ -364,7 +364,7 @@ function Window:Destroy()
 end
 
 -- Main CoolKidd functions
-function CoolKidd:NewWindow(windowSettings)
+function CoolKidd.NewWindow(windowSettings)
     windowSettings = windowSettings or {}
     local windowName = windowSettings.Name or "Exploit GUI"
     local windowSize = windowSettings.Size or UDim2.new(0, 600, 0, 450)
