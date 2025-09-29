@@ -1,4 +1,5 @@
--- GoldField UI Loader Script with Tabs
+--[[]]
+
 local plr = game.Players.LocalPlayer
 
 local LoadUi = {}
@@ -45,15 +46,22 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	GoldField.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	GoldField.ResetOnSpawn = false
 
-	-- Loading UI setup
+	-- Loading UI setup - RESPONSIVE
 	LoadingUi.Name = "LoadingUi"
 	LoadingUi.Parent = GoldField
 	LoadingUi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	LoadingUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	LoadingUi.BorderSizePixel = 0
-	LoadingUi.Position = UDim2.new(0.424017787, 0, 0.449748755, 0)
-	LoadingUi.Size = UDim2.new(0.151223123, 0, 0.0992462337, 0)
+	LoadingUi.AnchorPoint = Vector2.new(0.5, 0.5)
+	LoadingUi.Position = UDim2.new(0.5, 0, 0.5, 0)
+	LoadingUi.Size = UDim2.new(0.25, 0, 0.12, 0)
 	LoadingUi.ZIndex = 9999
+
+	-- Add size constraints for loading UI
+	local loadingSizeConstraint = Instance.new("UISizeConstraint")
+	loadingSizeConstraint.Parent = LoadingUi
+	loadingSizeConstraint.MinSize = Vector2.new(200, 80)
+	loadingSizeConstraint.MaxSize = Vector2.new(400, 120)
 
 	Default_Gradient.Color = ColorSequence.new{
 		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
@@ -72,14 +80,19 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainText.BackgroundTransparency = 1.000
 	MainText.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	MainText.BorderSizePixel = 0
-	MainText.Position = UDim2.new(0.0480769239, 0, 0.12658228, 0)
-	MainText.Size = UDim2.new(0, 226, 0, 26)
+	MainText.Position = UDim2.new(0.05, 0, 0.15, 0)
+	MainText.Size = UDim2.new(0.9, 0, 0.3, 0)
 	MainText.Font = Enum.Font.GothamBold
 	MainText.Text = tostring(name1 or "Loading...")
 	MainText.TextColor3 = Color3.fromRGB(255, 255, 255)
-	MainText.TextSize = 16.000
+	MainText.TextScaled = true
 	MainText.TextWrapped = true
 	MainText.TextXAlignment = Enum.TextXAlignment.Left
+
+	-- Text size constraint
+	local mainTextConstraint = Instance.new("UITextSizeConstraint")
+	mainTextConstraint.Parent = MainText
+	mainTextConstraint.MaxTextSize = 16
 
 	OtherText.Name = "OtherText"
 	OtherText.Parent = LoadingUi
@@ -87,14 +100,18 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	OtherText.BackgroundTransparency = 1.000
 	OtherText.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	OtherText.BorderSizePixel = 0
-	OtherText.Position = UDim2.new(0.0480768532, 0, 0.455696195, 0)
-	OtherText.Size = UDim2.new(0, 226, 0, 26)
+	OtherText.Position = UDim2.new(0.05, 0, 0.5, 0)
+	OtherText.Size = UDim2.new(0.9, 0, 0.3, 0)
 	OtherText.Font = Enum.Font.Gotham
 	OtherText.Text = tostring(name2 or "Please wait...")
 	OtherText.TextColor3 = Color3.fromRGB(255, 255, 255)
-	OtherText.TextSize = 14.000
+	OtherText.TextScaled = true
 	OtherText.TextWrapped = true
 	OtherText.TextXAlignment = Enum.TextXAlignment.Left
+
+	local otherTextConstraint = Instance.new("UITextSizeConstraint")
+	otherTextConstraint.Parent = OtherText
+	otherTextConstraint.MaxTextSize = 14
 
 	VersionText.Name = "VersionText"
 	VersionText.Parent = GoldField
@@ -102,25 +119,37 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	VersionText.BackgroundTransparency = 1.000
 	VersionText.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	VersionText.BorderSizePixel = 0
-	VersionText.Position = UDim2.new(0.00593031896, 0, 0.00879396964, 0)
-	VersionText.Size = UDim2.new(0, 226, 0, 26)
+	VersionText.Position = UDim2.new(0.01, 0, 0.01, 0)
+	VersionText.Size = UDim2.new(0.2, 0, 0.04, 0)
 	VersionText.Font = Enum.Font.Gotham
 	VersionText.Text = "Version: " .. tostring(versionOfUi or "Unknown")
 	VersionText.TextColor3 = Color3.fromRGB(255, 255, 255)
-	VersionText.TextSize = 14.000
+	VersionText.TextScaled = true
 	VersionText.TextWrapped = true
 	VersionText.TextXAlignment = Enum.TextXAlignment.Left
 	VersionText.ZIndex = 9999
 
+	local versionTextConstraint = Instance.new("UITextSizeConstraint")
+	versionTextConstraint.Parent = VersionText
+	versionTextConstraint.MaxTextSize = 14
+
+	-- Main UI setup - RESPONSIVE
 	MainUi.Name = "MainUi"
 	MainUi.Parent = GoldField
 	MainUi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	MainUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	MainUi.BorderSizePixel = 0
-	MainUi.Position = UDim2.new(0.338028163, 0, 0.180904523, 0)
-	MainUi.Size = UDim2.new(0.323943675, 0, 0.576633155, 0)
+	MainUi.AnchorPoint = Vector2.new(0.5, 0.5)
+	MainUi.Position = UDim2.new(0.5, 0, 0.5, 0)
+	MainUi.Size = UDim2.new(0.4, 0, 0.65, 0)
 	MainUi.Visible = false
 	MainUi.ZIndex = 9999
+
+	-- Add size constraints for main UI
+	local mainUiSizeConstraint = Instance.new("UISizeConstraint")
+	mainUiSizeConstraint.Parent = MainUi
+	mainUiSizeConstraint.MinSize = Vector2.new(320, 400)
+	mainUiSizeConstraint.MaxSize = Vector2.new(600, 700)
 
 	CornerIT_2.CornerRadius = UDim.new(0, 16)
 	CornerIT_2.Name = "CornerIT"
@@ -138,8 +167,8 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	Player.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Player.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Player.BorderSizePixel = 0
-	Player.Position = UDim2.new(-0.0526315048, 0, 0.936819196, 0)
-	Player.Size = UDim2.new(0.114867702, 0, 0.111111075, 0)
+	Player.Position = UDim2.new(0.02, 0, 0.92, 0)
+	Player.Size = UDim2.new(0, 50, 0, 50)
 	Player.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 	Player.Visible = (ShowPlayerUi == "Enabled")
 
@@ -153,15 +182,18 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	Display.BackgroundTransparency = 1.000
 	Display.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Display.BorderSizePixel = 0
-	Display.Position = UDim2.new(1.03591394, 0, 0.156862795, 0)
-	Display.Size = UDim2.new(0, 87, 0, 21)
+	Display.Position = UDim2.new(1.1, 0, 0.1, 0)
+	Display.Size = UDim2.new(0, 100, 0, 20)
 	Display.Font = Enum.Font.Gotham
 	Display.Text = ""
 	Display.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Display.TextScaled = true
-	Display.TextSize = 14.000
 	Display.TextWrapped = true
 	Display.TextXAlignment = Enum.TextXAlignment.Left
+
+	local displayTextConstraint = Instance.new("UITextSizeConstraint")
+	displayTextConstraint.Parent = Display
+	displayTextConstraint.MaxTextSize = 14
 
 	UserName.Name = "UserName"
 	UserName.Parent = Player
@@ -169,15 +201,18 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	UserName.BackgroundTransparency = 1.000
 	UserName.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	UserName.BorderSizePixel = 0
-	UserName.Position = UDim2.new(0.9960711, 0, 0.588235497, 0)
-	UserName.Size = UDim2.new(0, 87, 0, 12)
+	UserName.Position = UDim2.new(1.1, 0, 0.55, 0)
+	UserName.Size = UDim2.new(0, 100, 0, 15)
 	UserName.Font = Enum.Font.Gotham
 	UserName.Text = ""
 	UserName.TextColor3 = Color3.fromRGB(255, 255, 255)
 	UserName.TextScaled = true
-	UserName.TextSize = 14.000
 	UserName.TextWrapped = true
 	UserName.TextXAlignment = Enum.TextXAlignment.Left
+
+	local usernameTextConstraint = Instance.new("UITextSizeConstraint")
+	usernameTextConstraint.Parent = UserName
+	usernameTextConstraint.MaxTextSize = 12
 
 	TopUI.Name = "TopUI"
 	TopUI.Parent = MainUi
@@ -185,7 +220,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	TopUI.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	TopUI.BorderSizePixel = 0
 	TopUI.Position = UDim2.new(0, 0, 0, 0)
-	TopUI.Size = UDim2.new(1, 0, 0.0634983182, 0)
+	TopUI.Size = UDim2.new(1, 0, 0.08, 0)
 
 	Default_Gradient_3.Color = ColorSequence.new{
 		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
@@ -200,22 +235,26 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	MainText_2.BackgroundTransparency = 1.000
 	MainText_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	MainText_2.BorderSizePixel = 0
-	MainText_2.Position = UDim2.new(0.0137519026, 0, 0.0236511882, 0)
-	MainText_2.Size = UDim2.new(0, 226, 0, 26)
+	MainText_2.Position = UDim2.new(0.02, 0, 0.1, 0)
+	MainText_2.Size = UDim2.new(0.7, 0, 0.8, 0)
 	MainText_2.Font = Enum.Font.Gotham
 	MainText_2.Text = tostring(mainUiName or "UI")
 	MainText_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-	MainText_2.TextSize = 16.000
+	MainText_2.TextScaled = true
 	MainText_2.TextWrapped = true
 	MainText_2.TextXAlignment = Enum.TextXAlignment.Left
 
-	-- Tab Container (for tab buttons)
+	local mainText2Constraint = Instance.new("UITextSizeConstraint")
+	mainText2Constraint.Parent = MainText_2
+	mainText2Constraint.MaxTextSize = 16
+
+	-- Tab Container (for tab buttons) - RESPONSIVE
 	TabContainer.Name = "TabContainer"
 	TabContainer.Parent = MainUi
 	TabContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 	TabContainer.BorderSizePixel = 0
-	TabContainer.Position = UDim2.new(0, 0, 0.0634983182, 0)
-	TabContainer.Size = UDim2.new(1, 0, 0, 35)
+	TabContainer.Position = UDim2.new(0, 0, 0.08, 0)
+	TabContainer.Size = UDim2.new(1, 0, 0.06, 0)
 
 	local tabLayout = Instance.new("UIListLayout")
 	tabLayout.Parent = TabContainer
@@ -230,7 +269,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	tabPadding.PaddingLeft = UDim.new(0, 2)
 	tabPadding.PaddingRight = UDim.new(0, 2)
 
-	-- Main Content Area (adjusted for tabs)
+	-- Main Content Area - RESPONSIVE
 	ScriptUi.Name = "ScriptUi"
 	ScriptUi.Parent = MainUi
 	ScriptUi.Active = true
@@ -238,12 +277,12 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	ScriptUi.BackgroundTransparency = 1.000
 	ScriptUi.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ScriptUi.BorderSizePixel = 0
-	ScriptUi.Position = UDim2.new(0.0137299765, 0, 0.15, 0) -- Adjusted for tab container
-	ScriptUi.Size = UDim2.new(0.954233348, 0, 0.77, 0) -- Adjusted height
+	ScriptUi.Position = UDim2.new(0.02, 0, 0.15, 0)
+	ScriptUi.Size = UDim2.new(0.96, 0, 0.75, 0)
 	ScriptUi.CanvasSize = UDim2.new(0, 0, 0, 0)
 	ScriptUi.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	ScriptUi.ScrollBarThickness = 4
-	ScriptUi.Visible = false -- Initially hidden until first tab is created
+	ScriptUi.Visible = false
 
 	local UIListLayout = Instance.new("UIListLayout")
 	UIListLayout.Parent = ScriptUi
@@ -255,12 +294,17 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	X.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
 	X.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	X.BorderSizePixel = 0
-	X.Position = UDim2.new(0.938215017, 0, 0.0130719617, 0)
-	X.Size = UDim2.new(0.0366132706, 0, 0.0351758599, 0)
+	X.AnchorPoint = Vector2.new(1, 0)
+	X.Position = UDim2.new(0.98, 0, 0.015, 0)
+	X.Size = UDim2.new(0, 25, 0, 25)
 	X.Font = Enum.Font.GothamBold
 	X.Text = "X"
 	X.TextColor3 = Color3.fromRGB(255, 255, 255)
-	X.TextSize = 14.000
+	X.TextScaled = true
+
+	local xTextConstraint = Instance.new("UITextSizeConstraint")
+	xTextConstraint.Parent = X
+	xTextConstraint.MaxTextSize = 14
 
 	CornerIT_4.CornerRadius = UDim.new(1, 0)
 	CornerIT_4.Name = "CornerIT"
@@ -350,8 +394,8 @@ function LoadUi:NewTab(TabName)
 	TabFrame.BackgroundTransparency = 1.000
 	TabFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	TabFrame.BorderSizePixel = 0
-	TabFrame.Position = UDim2.new(0.0137299765, 0, 0.15, 0)
-	TabFrame.Size = UDim2.new(0.954233348, 0, 0.77, 0)
+	TabFrame.Position = UDim2.new(0.02, 0, 0.15, 0)
+	TabFrame.Size = UDim2.new(0.96, 0, 0.75, 0)
 	TabFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 	TabFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	TabFrame.ScrollBarThickness = 4
@@ -362,18 +406,26 @@ function LoadUi:NewTab(TabName)
 	TabLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	TabLayout.Padding = UDim.new(0, 2)
 
-	-- Create tab button
+	-- Create tab button - RESPONSIVE
 	local TabButton = Instance.new("TextButton")
 	TabButton.Name = "TabButton_" .. tostring(TabName)
 	TabButton.Parent = TabContainer
 	TabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	TabButton.BorderSizePixel = 0
-	TabButton.Size = UDim2.new(0, 100, 1, -4)
+	TabButton.Size = UDim2.new(0.15, 0, 1, -4)
 	TabButton.Font = Enum.Font.RobotoMono
 	TabButton.Text = tostring(TabName or "Tab")
 	TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-	TabButton.TextSize = 12
 	TabButton.TextScaled = true
+
+	local tabButtonConstraint = Instance.new("UITextSizeConstraint")
+	tabButtonConstraint.Parent = TabButton
+	tabButtonConstraint.MaxTextSize = 12
+
+	local tabButtonSizeConstraint = Instance.new("UISizeConstraint")
+	tabButtonSizeConstraint.Parent = TabButton
+	tabButtonSizeConstraint.MinSize = Vector2.new(60, 0)
+	tabButtonSizeConstraint.MaxSize = Vector2.new(150, math.huge)
 
 	local tabCorner = Instance.new("UICorner")
 	tabCorner.CornerRadius = UDim.new(0, 5)
@@ -451,13 +503,17 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction, TargetFrame)
 	Button.Font = Enum.Font.RobotoMono
 	Button.Name = "NewButton"
 	Button.Text = tostring(NameOfButton or "Button")
-	Button.Size = UDim2.new(1, -10, 0, 30)
+	Button.Size = UDim2.new(1, -10, 0, 35)
 	Button.TextScaled = true
 	Button.TextWrapped = true
 	Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Button.TextXAlignment = Enum.TextXAlignment.Left
 	Button.BorderSizePixel = 0
+
+	local buttonTextConstraint = Instance.new("UITextSizeConstraint")
+	buttonTextConstraint.Parent = Button
+	buttonTextConstraint.MaxTextSize = 14
 
 	local corner = Instance.new("UICorner")
 	corner.CornerRadius = UDim.new(0, 5)
@@ -501,11 +557,15 @@ function LoadUi:NewText(Text, TargetFrame)
 	TextLabel.Font = Enum.Font.RobotoMono
 	TextLabel.Name = "NewText"
 	TextLabel.Text = tostring(Text or "Text")
-	TextLabel.Size = UDim2.new(1, -10, 0, 25)
+	TextLabel.Size = UDim2.new(1, -10, 0, 30)
 	TextLabel.TextScaled = true
 	TextLabel.TextWrapped = true
 	TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local textConstraint = Instance.new("UITextSizeConstraint")
+	textConstraint.Parent = TextLabel
+	textConstraint.MaxTextSize = 14
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 10)
@@ -551,7 +611,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 	local ToggleFrame = Instance.new("Frame")
 	ToggleFrame.Parent = targetFrame
 	ToggleFrame.Name = "NewToggle"
-	ToggleFrame.Size = UDim2.new(1, -10, 0, 30)
+	ToggleFrame.Size = UDim2.new(1, -10, 0, 35)
 	ToggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	ToggleFrame.BorderSizePixel = 0
 
@@ -571,35 +631,41 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 	ToggleLabel.Name = "Label"
 	ToggleLabel.BackgroundTransparency = 1
 	ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
-	ToggleLabel.Size = UDim2.new(1, -50, 1, 0)
+	ToggleLabel.Size = UDim2.new(0.7, 0, 1, 0)
 	ToggleLabel.Font = Enum.Font.RobotoMono
 	ToggleLabel.Text = tostring(ToggleName or "Toggle")
 	ToggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	ToggleLabel.TextScaled = true
 	ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+	local toggleLabelConstraint = Instance.new("UITextSizeConstraint")
+	toggleLabelConstraint.Parent = ToggleLabel
+	toggleLabelConstraint.MaxTextSize = 14
+
 	local ToggleSwitch = Instance.new("Frame")
 	ToggleSwitch.Parent = ToggleFrame
 	ToggleSwitch.Name = "Switch"
-	ToggleSwitch.Position = UDim2.new(1, -35, 0.5, -8)
-	ToggleSwitch.Size = UDim2.new(0, 30, 0, 16)
+	ToggleSwitch.AnchorPoint = Vector2.new(1, 0.5)
+	ToggleSwitch.Position = UDim2.new(1, -10, 0.5, 0)
+	ToggleSwitch.Size = UDim2.new(0, 40, 0, 20)
 	ToggleSwitch.BackgroundColor3 = ToggleState and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(100, 100, 100)
 	ToggleSwitch.BorderSizePixel = 0
 
 	local switchCorner = Instance.new("UICorner")
-	switchCorner.CornerRadius = UDim.new(0, 8)
+	switchCorner.CornerRadius = UDim.new(0.5, 0)
 	switchCorner.Parent = ToggleSwitch
 
 	local ToggleCircle = Instance.new("Frame")
 	ToggleCircle.Parent = ToggleSwitch
 	ToggleCircle.Name = "Circle"
-	ToggleCircle.Size = UDim2.new(0, 12, 0, 12)
-	ToggleCircle.Position = ToggleState and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+	ToggleCircle.Size = UDim2.new(0, 16, 0, 16)
+	ToggleCircle.AnchorPoint = Vector2.new(0, 0.5)
+	ToggleCircle.Position = ToggleState and UDim2.new(1, -18, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
 	ToggleCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	ToggleCircle.BorderSizePixel = 0
 
 	local circleCorner = Instance.new("UICorner")
-	circleCorner.CornerRadius = UDim.new(0, 6)
+	circleCorner.CornerRadius = UDim.new(1, 0)
 	circleCorner.Parent = ToggleCircle
 
 	local function UpdateToggle()
@@ -608,7 +674,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 			BackgroundColor3 = ToggleState and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(100, 100, 100)
 		})
 		local circleTween = TweenService:Create(ToggleCircle, TweenInfo.new(0.2), {
-			Position = ToggleState and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+			Position = ToggleState and UDim2.new(1, -18, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
 		})
 		switchTween:Play()
 		circleTween:Play()
@@ -657,7 +723,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 	local DropdownFrame = Instance.new("Frame")
 	DropdownFrame.Parent = targetFrame
 	DropdownFrame.Name = "NewDropdown"
-	DropdownFrame.Size = UDim2.new(1, -10, 0, 30)
+	DropdownFrame.Size = UDim2.new(1, -10, 0, 35)
 	DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	DropdownFrame.BorderSizePixel = 0
 	DropdownFrame.ClipsDescendants = true
@@ -669,7 +735,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 	local DropdownButton = Instance.new("TextButton")
 	DropdownButton.Parent = DropdownFrame
 	DropdownButton.Name = "Button"
-	DropdownButton.Size = UDim2.new(1, 0, 0, 30)
+	DropdownButton.Size = UDim2.new(1, 0, 0, 35)
 	DropdownButton.BackgroundTransparency = 1
 	DropdownButton.Text = ""
 
@@ -678,29 +744,38 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 	DropdownLabel.Name = "Label"
 	DropdownLabel.BackgroundTransparency = 1
 	DropdownLabel.Position = UDim2.new(0, 10, 0, 0)
-	DropdownLabel.Size = UDim2.new(1, -30, 1, 0)
+	DropdownLabel.Size = UDim2.new(0.8, 0, 1, 0)
 	DropdownLabel.Font = Enum.Font.RobotoMono
 	DropdownLabel.Text = tostring(DropdownName or "Dropdown") .. ": " .. tostring(SelectedOption)
 	DropdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	DropdownLabel.TextScaled = true
 	DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+	local dropdownLabelConstraint = Instance.new("UITextSizeConstraint")
+	dropdownLabelConstraint.Parent = DropdownLabel
+	dropdownLabelConstraint.MaxTextSize = 14
+
 	local DropdownArrow = Instance.new("TextLabel")
 	DropdownArrow.Parent = DropdownButton
 	DropdownArrow.Name = "Arrow"
 	DropdownArrow.BackgroundTransparency = 1
-	DropdownArrow.Position = UDim2.new(1, -25, 0, 0)
-	DropdownArrow.Size = UDim2.new(0, 20, 1, 0)
+	DropdownArrow.AnchorPoint = Vector2.new(1, 0.5)
+	DropdownArrow.Position = UDim2.new(1, -10, 0.5, 0)
+	DropdownArrow.Size = UDim2.new(0, 20, 0, 20)
 	DropdownArrow.Font = Enum.Font.RobotoMono
 	DropdownArrow.Text = "▼"
 	DropdownArrow.TextColor3 = Color3.fromRGB(255, 255, 255)
 	DropdownArrow.TextScaled = true
 
+	local arrowConstraint = Instance.new("UITextSizeConstraint")
+	arrowConstraint.Parent = DropdownArrow
+	arrowConstraint.MaxTextSize = 12
+
 	local OptionsFrame = Instance.new("Frame")
 	OptionsFrame.Parent = DropdownFrame
 	OptionsFrame.Name = "Options"
-	OptionsFrame.Position = UDim2.new(0, 0, 0, 30)
-	OptionsFrame.Size = UDim2.new(1, 0, 0, #OptionsTable * 25)
+	OptionsFrame.Position = UDim2.new(0, 0, 0, 35)
+	OptionsFrame.Size = UDim2.new(1, 0, 0, #OptionsTable * 30)
 	OptionsFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 	OptionsFrame.BorderSizePixel = 0
 
@@ -711,7 +786,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 	local function UpdateDropdown()
 		local TweenService = game:GetService("TweenService")
 		local sizeTween = TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
-			Size = IsOpen and UDim2.new(1, -10, 0, 30 + (#OptionsTable * 25)) or UDim2.new(1, -10, 0, 30)
+			Size = IsOpen and UDim2.new(1, -10, 0, 35 + (#OptionsTable * 30)) or UDim2.new(1, -10, 0, 35)
 		})
 		local arrowTween = TweenService:Create(DropdownArrow, TweenInfo.new(0.2), {
 			Rotation = IsOpen and 180 or 0
@@ -724,7 +799,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 		local OptionButton = Instance.new("TextButton")
 		OptionButton.Parent = OptionsFrame
 		OptionButton.Name = "Option_" .. i
-		OptionButton.Size = UDim2.new(1, 0, 0, 25)
+		OptionButton.Size = UDim2.new(1, 0, 0, 30)
 		OptionButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 		OptionButton.BorderSizePixel = 0
 		OptionButton.Font = Enum.Font.RobotoMono
@@ -732,6 +807,10 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 		OptionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 		OptionButton.TextScaled = true
 		OptionButton.TextXAlignment = Enum.TextXAlignment.Left
+
+		local optionConstraint = Instance.new("UITextSizeConstraint")
+		optionConstraint.Parent = OptionButton
+		optionConstraint.MaxTextSize = 12
 
 		OptionButton.MouseEnter:Connect(function()
 			OptionButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -779,7 +858,6 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 		end,
 		AddOption = function(option)
 			table.insert(OptionsTable, option)
-			-- Recreate options (simplified approach)
 		end
 	}
 end
@@ -794,7 +872,7 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	local InputFrame = Instance.new("Frame")
 	InputFrame.Parent = targetFrame
 	InputFrame.Name = "NewTextInput"
-	InputFrame.Size = UDim2.new(1, -10, 0, 50)
+	InputFrame.Size = UDim2.new(1, -10, 0, 55)
 	InputFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	InputFrame.BorderSizePixel = 0
 
@@ -807,12 +885,16 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	InputLabel.Name = "Label"
 	InputLabel.BackgroundTransparency = 1
 	InputLabel.Position = UDim2.new(0, 10, 0, 5)
-	InputLabel.Size = UDim2.new(1, -20, 0, 15)
+	InputLabel.Size = UDim2.new(1, -20, 0, 18)
 	InputLabel.Font = Enum.Font.RobotoMono
 	InputLabel.Text = tostring(InputName or "Text Input")
 	InputLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-	InputLabel.TextSize = 12
+	InputLabel.TextScaled = true
 	InputLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local inputLabelConstraint = Instance.new("UITextSizeConstraint")
+	inputLabelConstraint.Parent = InputLabel
+	inputLabelConstraint.MaxTextSize = 12
 
 	local TextBox = Instance.new("TextBox")
 	TextBox.Parent = InputFrame
@@ -820,15 +902,19 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	TextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	TextBox.BorderSizePixel = 1
 	TextBox.BorderColor3 = Color3.fromRGB(60, 60, 60)
-	TextBox.Position = UDim2.new(0, 10, 0, 22)
+	TextBox.Position = UDim2.new(0, 10, 0, 27)
 	TextBox.Size = UDim2.new(1, -20, 0, 23)
 	TextBox.Font = Enum.Font.RobotoMono
 	TextBox.Text = ""
 	TextBox.PlaceholderText = tostring(PlaceholderText or "Enter text...")
 	TextBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
 	TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-	TextBox.TextSize = 11
+	TextBox.TextScaled = true
 	TextBox.TextXAlignment = Enum.TextXAlignment.Left
+
+	local textBoxConstraint = Instance.new("UITextSizeConstraint")
+	textBoxConstraint.Parent = TextBox
+	textBoxConstraint.MaxTextSize = 11
 
 	local textBoxCorner = Instance.new("UICorner")
 	textBoxCorner.CornerRadius = UDim.new(0, 3)
@@ -839,7 +925,6 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	textBoxPadding.PaddingRight = UDim.new(0, 8)
 	textBoxPadding.Parent = TextBox
 
-	-- TextBox functionality
 	TextBox.FocusLost:Connect(function(enterPressed)
 		if InputCallback and enterPressed then
 			local success, err = pcall(function()
@@ -856,7 +941,6 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 		end
 	end)
 
-	-- Focus animations
 	TextBox.Focused:Connect(function()
 		TextBox.BorderColor3 = Color3.fromRGB(100, 100, 100)
 	end)
@@ -874,12 +958,10 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	}
 end
 
-
 function LoadUi:Notify(Title, Message, Duration, NotifType)
 	local plr = game.Players.LocalPlayer
 	local playerGui = plr:WaitForChild("PlayerGui")
 	
-	-- Get or create notification container
 	local notifContainer = playerGui:FindFirstChild("GoldField_Notifications")
 	if not notifContainer then
 		notifContainer = Instance.new("ScreenGui")
@@ -889,21 +971,25 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 		notifContainer.ResetOnSpawn = false
 	end
 	
-	-- Create notification frame
 	local NotifFrame = Instance.new("Frame")
 	NotifFrame.Name = "Notification"
 	NotifFrame.Parent = notifContainer
 	NotifFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	NotifFrame.BorderSizePixel = 0
-	NotifFrame.Size = UDim2.new(0, 300, 0, 80)
-	NotifFrame.Position = UDim2.new(1, 320, 1, -100)
+	NotifFrame.AnchorPoint = Vector2.new(1, 1)
+	NotifFrame.Size = UDim2.new(0.25, 0, 0, 80)
+	NotifFrame.Position = UDim2.new(1.5, 0, 1, -20)
 	NotifFrame.ZIndex = 10000
+	
+	local notifSizeConstraint = Instance.new("UISizeConstraint")
+	notifSizeConstraint.Parent = NotifFrame
+	notifSizeConstraint.MinSize = Vector2.new(250, 80)
+	notifSizeConstraint.MaxSize = Vector2.new(350, 120)
 	
 	local notifCorner = Instance.new("UICorner")
 	notifCorner.CornerRadius = UDim.new(0, 8)
 	notifCorner.Parent = NotifFrame
 	
-	-- Type indicator bar
 	local TypeBar = Instance.new("Frame")
 	TypeBar.Name = "TypeBar"
 	TypeBar.Parent = NotifFrame
@@ -912,7 +998,6 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	TypeBar.Size = UDim2.new(0, 4, 1, 0)
 	TypeBar.Position = UDim2.new(0, 0, 0, 0)
 	
-	-- Set color based on notification type
 	local notifTypeColors = {
 		["Success"] = Color3.fromRGB(0, 200, 100),
 		["Error"] = Color3.fromRGB(255, 70, 70),
@@ -921,21 +1006,23 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	}
 	TypeBar.BackgroundColor3 = notifTypeColors[NotifType] or Color3.fromRGB(100, 100, 100)
 	
-	-- Title label
 	local TitleLabel = Instance.new("TextLabel")
 	TitleLabel.Name = "Title"
 	TitleLabel.Parent = NotifFrame
 	TitleLabel.BackgroundTransparency = 1
 	TitleLabel.Position = UDim2.new(0, 15, 0, 8)
-	TitleLabel.Size = UDim2.new(1, -30, 0, 20)
+	TitleLabel.Size = UDim2.new(1, -50, 0, 20)
 	TitleLabel.Font = Enum.Font.GothamBold
 	TitleLabel.Text = tostring(Title or "Notification")
 	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	TitleLabel.TextSize = 14
+	TitleLabel.TextScaled = true
 	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 	TitleLabel.TextTruncate = Enum.TextTruncate.AtEnd
+
+	local titleConstraint = Instance.new("UITextSizeConstraint")
+	titleConstraint.Parent = TitleLabel
+	titleConstraint.MaxTextSize = 14
 	
-	-- Message label
 	local MessageLabel = Instance.new("TextLabel")
 	MessageLabel.Name = "Message"
 	MessageLabel.Parent = NotifFrame
@@ -945,50 +1032,56 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	MessageLabel.Font = Enum.Font.Gotham
 	MessageLabel.Text = tostring(Message or "")
 	MessageLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-	MessageLabel.TextSize = 12
+	MessageLabel.TextScaled = true
 	MessageLabel.TextWrapped = true
 	MessageLabel.TextXAlignment = Enum.TextXAlignment.Left
 	MessageLabel.TextYAlignment = Enum.TextYAlignment.Top
+
+	local messageConstraint = Instance.new("UITextSizeConstraint")
+	messageConstraint.Parent = MessageLabel
+	messageConstraint.MaxTextSize = 12
 	
-	-- Close button
 	local CloseButton = Instance.new("TextButton")
 	CloseButton.Name = "Close"
 	CloseButton.Parent = NotifFrame
 	CloseButton.BackgroundTransparency = 1
-	CloseButton.Position = UDim2.new(1, -25, 0, 5)
+	CloseButton.AnchorPoint = Vector2.new(1, 0)
+	CloseButton.Position = UDim2.new(1, -5, 0, 5)
 	CloseButton.Size = UDim2.new(0, 20, 0, 20)
 	CloseButton.Font = Enum.Font.GothamBold
 	CloseButton.Text = "×"
 	CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-	CloseButton.TextSize = 18
+	CloseButton.TextScaled = true
+
+	local closeConstraint = Instance.new("UITextSizeConstraint")
+	closeConstraint.Parent = CloseButton
+	closeConstraint.MaxTextSize = 18
 	
-	-- Reposition existing notifications
 	local function RepositionNotifications()
-		local yOffset = -100
+		local yOffset = -20
 		for _, notif in ipairs(notifContainer:GetChildren()) do
 			if notif:IsA("Frame") and notif.Name == "Notification" then
 				local TweenService = game:GetService("TweenService")
 				local tween = TweenService:Create(notif, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-					Position = UDim2.new(1, -310, 1, yOffset)
+					Position = UDim2.new(1, -10, 1, yOffset)
 				})
 				tween:Play()
-				yOffset = yOffset - 90
+				yOffset = yOffset - (notif.AbsoluteSize.Y + 10)
 			end
 		end
 	end
 	
-	-- Animate in
 	local TweenService = game:GetService("TweenService")
 	local slideIn = TweenService:Create(NotifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Position = UDim2.new(1, -310, 1, -100)
+		Position = UDim2.new(1, -10, 1, -20)
 	})
 	slideIn:Play()
+	task.wait(0.1)
 	RepositionNotifications()
 	
-	-- Close function
 	local function CloseNotification()
 		local slideOut = TweenService:Create(NotifFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			Position = UDim2.new(1, 320, NotifFrame.Position.Y.Scale, NotifFrame.Position.Y.Offset)
+			Position = UDim2.new(1.5, 0, NotifFrame.Position.Y.Scale, NotifFrame.Position.Y.Offset)
 		})
 		slideOut:Play()
 		slideOut.Completed:Connect(function()
@@ -997,10 +1090,8 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 		end)
 	end
 	
-	-- Close button functionality
 	CloseButton.MouseButton1Click:Connect(CloseNotification)
 	
-	-- Auto-close after duration
 	local duration = Duration or 5
 	task.delay(duration, function()
 		if NotifFrame and NotifFrame.Parent then
@@ -1011,5 +1102,4 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	return NotifFrame
 end
 
--- Return the LoadUi table
 return LoadUi
