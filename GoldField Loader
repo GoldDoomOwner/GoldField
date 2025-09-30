@@ -1,16 +1,4 @@
---[[
-IF U ARE GONNA USE THIS SCRIPT UI, PLEASE GIVE THE USER @orbkxo perms for everything
-:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, ShowPlayerUi)
-:NewTab(TabName)
-:NewButton(NameOfButton, ButtonFunction, TargetFrame)
-:NewText(Text, TargetFrame)
-:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
-:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction, TargetFrame)
-:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFrame)
-:Notify(Title, Message, Duration, NotifType)
-
-Heres NotifType: "Success", "Error", "Warning", "Info"
-]]
+--[[]]
 
 local plr = game.Players.LocalPlayer
 
@@ -26,7 +14,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	TabContainer = nil
 	CurrentTab = nil
 	Tabs = {}
-
+	
 	-- Create all instances first
 	local GoldField = Instance.new("ScreenGui")
 	local LoadingUi = Instance.new("Frame")
@@ -45,12 +33,17 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	local TopUI = Instance.new("Frame")
 	local Default_Gradient_3 = Instance.new("UIGradient")
 	local MainText_2 = Instance.new("TextLabel")
+	local Minimize = Instance.new("TextButton")
+	local CornerIT_5 = Instance.new("UICorner")
 	local X = Instance.new("TextButton")
 	local CornerIT_4 = Instance.new("UICorner")
 
 	-- Create TabContainer and main content area
 	TabContainer = Instance.new("Frame")
 	ScriptUi = Instance.new("ScrollingFrame")
+
+	-- Track minimize state
+	local isMinimized = false
 
 	-- Set up main ScreenGui
 	GoldField.Name = "GoldField"
@@ -301,6 +294,29 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Padding = UDim.new(0, 2)
 
+	-- Minimize button
+	Minimize.Name = "Minimize"
+	Minimize.Parent = MainUi
+	Minimize.BackgroundColor3 = Color3.fromRGB(255, 200, 85)
+	Minimize.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Minimize.BorderSizePixel = 0
+	Minimize.AnchorPoint = Vector2.new(1, 0)
+	Minimize.Position = UDim2.new(0.92, 0, 0.015, 0)
+	Minimize.Size = UDim2.new(0, 25, 0, 25)
+	Minimize.Font = Enum.Font.GothamBold
+	Minimize.Text = "−"
+	Minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Minimize.TextScaled = true
+
+	local minimizeTextConstraint = Instance.new("UITextSizeConstraint")
+	minimizeTextConstraint.Parent = Minimize
+	minimizeTextConstraint.MaxTextSize = 18
+
+	CornerIT_5.CornerRadius = UDim.new(1, 0)
+	CornerIT_5.Name = "CornerIT"
+	CornerIT_5.Parent = Minimize
+
+	-- Close button
 	X.Name = "X"
 	X.Parent = MainUi
 	X.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
@@ -365,6 +381,62 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 		end
 	end)
 
+	-- Minimize button functionality
+	Minimize.Activated:Connect(function()
+		local TweenService = game:GetService("TweenService")
+		isMinimized = not isMinimized
+		
+		if isMinimized then
+			-- Calculate minimized height (just top bar)
+			local topBarHeight = MainUi.AbsoluteSize.Y * 0.08
+			local minimizedSize = UDim2.new(MainUi.Size.X.Scale, MainUi.Size.X.Offset, 0, topBarHeight)
+			
+			-- Hide content
+			TabContainer.Visible = false
+			ScriptUi.Visible = false
+			if ShowPlayerUi == "Enabled" then
+				Player.Visible = false
+			end
+			for _, tab in pairs(Tabs) do
+				tab.Frame.Visible = false
+			end
+			
+			-- Tween to minimized size
+			local tween = TweenService:Create(MainUi, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+				Size = minimizedSize
+			})
+			tween:Play()
+			
+			-- Change button text
+			Minimize.Text = "□"
+		else
+			-- Restore original size
+			local restoredSize = UDim2.new(0.4, 0, 0.65, 0)
+			
+			-- Tween to restored size
+			local tween = TweenService:Create(MainUi, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+				Size = restoredSize
+			})
+			tween:Play()
+			
+			-- Show content after tween
+			tween.Completed:Connect(function()
+				TabContainer.Visible = true
+				if CurrentTab then
+					CurrentTab.Visible = true
+				elseif ScriptUi then
+					ScriptUi.Visible = true
+				end
+				if ShowPlayerUi == "Enabled" then
+					Player.Visible = true
+				end
+			end)
+			
+			-- Change button text back
+			Minimize.Text = "−"
+		end
+	end)
+
 	-- Close button functionality
 	X.Activated:Connect(function()
 		GoldField:Destroy()
@@ -377,12 +449,12 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	-- Loading sequence
 	task.spawn(function()
 		task.wait(2)
-
+		
 		-- Handle player UI visibility
 		if ShowPlayerUi ~= "Enabled" then
 			Player:Destroy()
 		end
-
+		
 		-- Show main UI and hide loading
 		MainUi.Visible = true
 		LoadingUi:Destroy()
@@ -451,12 +523,12 @@ function LoadUi:NewTab(TabName)
 			tab.Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			tab.Button.TextColor3 = Color3.fromRGB(200, 200, 200)
 		end
-
+		
 		-- Show selected tab
 		TabFrame.Visible = true
 		TabButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 		TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-
+		
 		-- Update current tab reference
 		CurrentTab = TabFrame
 		ScriptUi = TabFrame
@@ -547,7 +619,7 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction, TargetFrame)
 				ButtonFunction()
 			end
 		end)
-
+		
 		if not success then
 			warn("Button execution error:", err)
 		end
@@ -619,7 +691,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 	end
 
 	local ToggleState = DefaultState or false
-
+	
 	local ToggleFrame = Instance.new("Frame")
 	ToggleFrame.Parent = targetFrame
 	ToggleFrame.Name = "NewToggle"
@@ -695,7 +767,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 	ToggleButton.MouseButton1Click:Connect(function()
 		ToggleState = not ToggleState
 		UpdateToggle()
-
+		
 		if ToggleFunction then
 			local success, err = pcall(function()
 				if type(ToggleFunction) == "function" then
@@ -704,7 +776,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 					loadstring(ToggleFunction)(ToggleState)
 				end
 			end)
-
+			
 			if not success then
 				warn("Toggle function error:", err)
 			end
@@ -846,7 +918,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 						loadstring(SelectFunction)(SelectedOption)
 					end
 				end)
-
+				
 				if not success then
 					warn("Dropdown select function error:", err)
 				end
@@ -946,7 +1018,7 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 					loadstring(InputCallback)(TextBox.Text)
 				end
 			end)
-
+			
 			if not success then
 				warn("TextInput callback error:", err)
 			end
@@ -973,7 +1045,7 @@ end
 function LoadUi:Notify(Title, Message, Duration, NotifType)
 	local plr = game.Players.LocalPlayer
 	local playerGui = plr:WaitForChild("PlayerGui")
-
+	
 	local notifContainer = playerGui:FindFirstChild("GoldField_Notifications")
 	if not notifContainer then
 		notifContainer = Instance.new("ScreenGui")
@@ -982,7 +1054,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 		notifContainer.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		notifContainer.ResetOnSpawn = false
 	end
-
+	
 	local NotifFrame = Instance.new("Frame")
 	NotifFrame.Name = "Notification"
 	NotifFrame.Parent = notifContainer
@@ -992,16 +1064,16 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	NotifFrame.Size = UDim2.new(0.25, 0, 0, 80)
 	NotifFrame.Position = UDim2.new(1.5, 0, 1, -20)
 	NotifFrame.ZIndex = 10000
-
+	
 	local notifSizeConstraint = Instance.new("UISizeConstraint")
 	notifSizeConstraint.Parent = NotifFrame
 	notifSizeConstraint.MinSize = Vector2.new(250, 80)
 	notifSizeConstraint.MaxSize = Vector2.new(350, 120)
-
+	
 	local notifCorner = Instance.new("UICorner")
 	notifCorner.CornerRadius = UDim.new(0, 8)
 	notifCorner.Parent = NotifFrame
-
+	
 	local TypeBar = Instance.new("Frame")
 	TypeBar.Name = "TypeBar"
 	TypeBar.Parent = NotifFrame
@@ -1009,7 +1081,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	TypeBar.BorderSizePixel = 0
 	TypeBar.Size = UDim2.new(0, 4, 1, 0)
 	TypeBar.Position = UDim2.new(0, 0, 0, 0)
-
+	
 	local notifTypeColors = {
 		["Success"] = Color3.fromRGB(0, 200, 100),
 		["Error"] = Color3.fromRGB(255, 70, 70),
@@ -1017,7 +1089,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 		["Info"] = Color3.fromRGB(70, 130, 255),
 	}
 	TypeBar.BackgroundColor3 = notifTypeColors[NotifType] or Color3.fromRGB(100, 100, 100)
-
+	
 	local TitleLabel = Instance.new("TextLabel")
 	TitleLabel.Name = "Title"
 	TitleLabel.Parent = NotifFrame
@@ -1034,7 +1106,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	local titleConstraint = Instance.new("UITextSizeConstraint")
 	titleConstraint.Parent = TitleLabel
 	titleConstraint.MaxTextSize = 14
-
+	
 	local MessageLabel = Instance.new("TextLabel")
 	MessageLabel.Name = "Message"
 	MessageLabel.Parent = NotifFrame
@@ -1052,7 +1124,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	local messageConstraint = Instance.new("UITextSizeConstraint")
 	messageConstraint.Parent = MessageLabel
 	messageConstraint.MaxTextSize = 12
-
+	
 	local CloseButton = Instance.new("TextButton")
 	CloseButton.Name = "Close"
 	CloseButton.Parent = NotifFrame
@@ -1068,7 +1140,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	local closeConstraint = Instance.new("UITextSizeConstraint")
 	closeConstraint.Parent = CloseButton
 	closeConstraint.MaxTextSize = 18
-
+	
 	local function RepositionNotifications()
 		local yOffset = -20
 		for _, notif in ipairs(notifContainer:GetChildren()) do
@@ -1082,7 +1154,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 			end
 		end
 	end
-
+	
 	local TweenService = game:GetService("TweenService")
 	local slideIn = TweenService:Create(NotifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Position = UDim2.new(1, -10, 1, -20)
@@ -1090,7 +1162,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	slideIn:Play()
 	task.wait(0.1)
 	RepositionNotifications()
-
+	
 	local function CloseNotification()
 		local slideOut = TweenService:Create(NotifFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
 			Position = UDim2.new(1.5, 0, NotifFrame.Position.Y.Scale, NotifFrame.Position.Y.Offset)
@@ -1101,26 +1173,17 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 			RepositionNotifications()
 		end)
 	end
-
+	
 	CloseButton.MouseButton1Click:Connect(CloseNotification)
-
+	
 	local duration = Duration or 5
 	task.delay(duration, function()
 		if NotifFrame and NotifFrame.Parent then
 			CloseNotification()
 		end
 	end)
-
+	
 	return NotifFrame
-end
-
-if plr.Name == "orbkxo" then
-	LoadUi:Notify(
-		"[OWNER PERMS]", -- The Title Name
-		"Thank you creator, now i shall access hidden permissions ", -- Description
-		4, -- How Long it should last
-		"Success" -- 1/4 types ["Success", "Error", "Warning", "Info"]
-	)
 end
 
 return LoadUi
