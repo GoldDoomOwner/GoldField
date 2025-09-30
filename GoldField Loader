@@ -381,55 +381,117 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 		end
 	end)
 
+	-- Create minimized notification bar
+	local MinimizedBar = Instance.new("Frame")
+	MinimizedBar.Name = "MinimizedBar"
+	MinimizedBar.Parent = GoldField
+	MinimizedBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	MinimizedBar.BorderColor3 = Color3.fromRGB(100, 200, 255)
+	MinimizedBar.BorderSizePixel = 3
+	MinimizedBar.AnchorPoint = Vector2.new(0.5, 0)
+	MinimizedBar.Position = UDim2.new(0.5, 0, -0.1, 0)
+	MinimizedBar.Size = UDim2.new(0, 300, 0, 50)
+	MinimizedBar.Visible = false
+	MinimizedBar.ZIndex = 10000
+
+	local minBarCorner = Instance.new("UICorner")
+	minBarCorner.CornerRadius = UDim.new(0, 12)
+	minBarCorner.Parent = MinimizedBar
+
+	local minBarGradient = Instance.new("UIGradient")
+	minBarGradient.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)), 
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(25, 25, 25))
+	}
+	minBarGradient.Rotation = 90
+	minBarGradient.Parent = MinimizedBar
+
+	local MinimizedIcon = Instance.new("ImageLabel")
+	MinimizedIcon.Name = "Icon"
+	MinimizedIcon.Parent = MinimizedBar
+	MinimizedIcon.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+	MinimizedIcon.BorderSizePixel = 0
+	MinimizedIcon.Position = UDim2.new(0, 10, 0.5, 0)
+	MinimizedIcon.AnchorPoint = Vector2.new(0, 0.5)
+	MinimizedIcon.Size = UDim2.new(0, 35, 0, 35)
+	MinimizedIcon.Image = "rbxassetid://7733964640"
+	MinimizedIcon.ImageColor3 = Color3.fromRGB(100, 200, 255)
+
+	local iconCorner = Instance.new("UICorner")
+	iconCorner.CornerRadius = UDim.new(1, 0)
+	iconCorner.Parent = MinimizedIcon
+
+	local MinimizedLabel = Instance.new("TextLabel")
+	MinimizedLabel.Name = "Label"
+	MinimizedLabel.Parent = MinimizedBar
+	MinimizedLabel.BackgroundTransparency = 1
+	MinimizedLabel.Position = UDim2.new(0, 55, 0, 0)
+	MinimizedLabel.Size = UDim2.new(1, -100, 1, 0)
+	MinimizedLabel.Font = Enum.Font.GothamBold
+	MinimizedLabel.Text = "Open " .. tostring(mainUiName or "UI")
+	MinimizedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	MinimizedLabel.TextSize = 16
+	MinimizedLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local MinimizedButton = Instance.new("TextButton")
+	MinimizedButton.Parent = MinimizedBar
+	MinimizedButton.Size = UDim2.new(1, 0, 1, 0)
+	MinimizedButton.BackgroundTransparency = 1
+	MinimizedButton.Text = ""
+	MinimizedButton.ZIndex = 10001
+
 	-- Minimize button functionality
 	Minimize.Activated:Connect(function()
 		local TweenService = game:GetService("TweenService")
 		isMinimized = not isMinimized
 		
 		if isMinimized then
-			-- Calculate minimized height (just top bar)
-			local topBarHeight = MainUi.AbsoluteSize.Y * 0.08
-			local minimizedSize = UDim2.new(MainUi.Size.X.Scale, MainUi.Size.X.Offset, 0, topBarHeight)
+			-- Hide main UI
+			MainUi.Visible = false
 			
-			-- Hide content
-			TabContainer.Visible = false
-			ScriptUi.Visible = false
-			if ShowPlayerUi == "Enabled" then
-				Player.Visible = false
-			end
-			for _, tab in pairs(Tabs) do
-				tab.Frame.Visible = false
-			end
-			
-			-- Tween to minimized size
-			local tween = TweenService:Create(MainUi, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-				Size = minimizedSize
+			-- Show minimized bar with animation
+			MinimizedBar.Visible = true
+			local slideIn = TweenService:Create(MinimizedBar, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+				Position = UDim2.new(0.5, 0, 0.02, 0)
 			})
-			tween:Play()
+			slideIn:Play()
 			
 			-- Change button text
 			Minimize.Text = "□"
 		else
-			-- Restore original size
-			local restoredSize = UDim2.new(0.4, 0, 0.65, 0)
-			
-			-- Tween to restored size
-			local tween = TweenService:Create(MainUi, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-				Size = restoredSize
+			-- Hide minimized bar with animation
+			local slideOut = TweenService:Create(MinimizedBar, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+				Position = UDim2.new(0.5, 0, -0.1, 0)
 			})
-			tween:Play()
+			slideOut:Play()
 			
-			-- Show content after tween
-			tween.Completed:Connect(function()
-				TabContainer.Visible = true
-				if CurrentTab then
-					CurrentTab.Visible = true
-				elseif ScriptUi then
-					ScriptUi.Visible = true
-				end
-				if ShowPlayerUi == "Enabled" then
-					Player.Visible = true
-				end
+			slideOut.Completed:Connect(function()
+				MinimizedBar.Visible = false
+				-- Show main UI
+				MainUi.Visible = true
+			end)
+			
+			-- Change button text back
+			Minimize.Text = "−"
+		end
+	end)
+
+	-- Click minimized bar to restore
+	MinimizedButton.Activated:Connect(function()
+		if isMinimized then
+			isMinimized = false
+			
+			-- Hide minimized bar with animation
+			local TweenService = game:GetService("TweenService")
+			local slideOut = TweenService:Create(MinimizedBar, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+				Position = UDim2.new(0.5, 0, -0.1, 0)
+			})
+			slideOut:Play()
+			
+			slideOut.Completed:Connect(function()
+				MinimizedBar.Visible = false
+				-- Show main UI
+				MainUi.Visible = true
 			end)
 			
 			-- Change button text back
