@@ -8,6 +8,8 @@ IF U ARE GONNA USE THIS SCRIPT UI, PLEASE GIVE THE USER @orbkxo perms for everyt
 :NewDropdown(DropdownName, Options, DefaultOption, SelectFunction, TargetFrame)
 :NewTextInput(InputName, PlaceholderText, InputCallback, TargetFrame)
 :Notify(Title, Message, Duration, NotifType)
+:NewSlider(SliderName, MinValue, MaxValue, DefaultValue, Increment, ValueCallback, TargetFrame)
+:NewMultiSelectDropdown(DropdownName, MinSelections, MaxSelections, DefaultSelection, SelectFunction, TargetFrame)
 
 Heres NotifType: "Success", "Error", "Warning", "Info"
 ]]
@@ -536,6 +538,363 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 
 	-- Return the LoadUi object for method chaining
 	return LoadUi
+end
+
+function LoadUi:NewMultiSelectDropdown(DropdownName, MinSelections, MaxSelections, DefaultSelection, SelectFunction, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewMultiSelectDropdown() - No valid target frame.")
+		return nil
+	end
+
+	local minSelect = math.clamp(MinSelections or 2, 2, 10)
+	local maxSelect = math.clamp(MaxSelections or 10, minSelect, 10)
+	local OptionsTable = {}
+	
+	-- Generate number options from minSelect to maxSelect
+	for i = minSelect, maxSelect do
+		table.insert(OptionsTable, tostring(i))
+	end
+	
+	local SelectedOption = DefaultSelection or OptionsTable[1]
+	local IsOpen = false
+
+	local DropdownFrame = Instance.new("Frame")
+	DropdownFrame.Parent = targetFrame
+	DropdownFrame.Name = "NewMultiSelectDropdown"
+	DropdownFrame.Size = UDim2.new(1, -10, 0, 35)
+	DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	DropdownFrame.BorderSizePixel = 0
+	DropdownFrame.ClipsDescendants = true
+
+	local dropdownCorner = Instance.new("UICorner")
+	dropdownCorner.CornerRadius = UDim.new(0, 5)
+	dropdownCorner.Parent = DropdownFrame
+
+	local DropdownButton = Instance.new("TextButton")
+	DropdownButton.Parent = DropdownFrame
+	DropdownButton.Name = "Button"
+	DropdownButton.Size = UDim2.new(1, 0, 0, 35)
+	DropdownButton.BackgroundTransparency = 1
+	DropdownButton.Text = ""
+
+	local DropdownLabel = Instance.new("TextLabel")
+	DropdownLabel.Parent = DropdownButton
+	DropdownLabel.Name = "Label"
+	DropdownLabel.BackgroundTransparency = 1
+	DropdownLabel.Position = UDim2.new(0, 10, 0, 0)
+	DropdownLabel.Size = UDim2.new(0.8, 0, 1, 0)
+	DropdownLabel.Font = Enum.Font.RobotoMono
+	DropdownLabel.Text = tostring(DropdownName or "Select Number") .. ": " .. tostring(SelectedOption)
+	DropdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	DropdownLabel.TextScaled = true
+	DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local dropdownLabelConstraint = Instance.new("UITextSizeConstraint")
+	dropdownLabelConstraint.Parent = DropdownLabel
+	dropdownLabelConstraint.MaxTextSize = 14
+
+	local DropdownArrow = Instance.new("TextLabel")
+	DropdownArrow.Parent = DropdownButton
+	DropdownArrow.Name = "Arrow"
+	DropdownArrow.BackgroundTransparency = 1
+	DropdownArrow.AnchorPoint = Vector2.new(1, 0.5)
+	DropdownArrow.Position = UDim2.new(1, -10, 0.5, 0)
+	DropdownArrow.Size = UDim2.new(0, 20, 0, 20)
+	DropdownArrow.Font = Enum.Font.RobotoMono
+	DropdownArrow.Text = "▼"
+	DropdownArrow.TextColor3 = Color3.fromRGB(255, 255, 255)
+	DropdownArrow.TextScaled = true
+
+	local arrowConstraint = Instance.new("UITextSizeConstraint")
+	arrowConstraint.Parent = DropdownArrow
+	arrowConstraint.MaxTextSize = 12
+
+	local OptionsFrame = Instance.new("Frame")
+	OptionsFrame.Parent = DropdownFrame
+	OptionsFrame.Name = "Options"
+	OptionsFrame.Position = UDim2.new(0, 0, 0, 35)
+	OptionsFrame.Size = UDim2.new(1, 0, 0, #OptionsTable * 30)
+	OptionsFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	OptionsFrame.BorderSizePixel = 0
+
+	local optionsLayout = Instance.new("UIListLayout")
+	optionsLayout.Parent = OptionsFrame
+	optionsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+	local function UpdateLabel()
+		DropdownLabel.Text = tostring(DropdownName or "Select Number") .. ": " .. tostring(SelectedOption)
+	end
+
+	local function UpdateDropdown()
+		local TweenService = game:GetService("TweenService")
+		local targetHeight = IsOpen and (35 + (#OptionsTable * 30)) or 35
+		local sizeTween = TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
+			Size = UDim2.new(1, -10, 0, targetHeight)
+		})
+		local arrowTween = TweenService:Create(DropdownArrow, TweenInfo.new(0.2), {
+			Rotation = IsOpen and 180 or 0
+		})
+		sizeTween:Play()
+		arrowTween:Play()
+	end
+
+	for i, option in ipairs(OptionsTable) do
+		local OptionButton = Instance.new("TextButton")
+		OptionButton.Parent = OptionsFrame
+		OptionButton.Name = "Option_" .. i
+		OptionButton.Size = UDim2.new(1, 0, 0, 30)
+		OptionButton.BackgroundColor3 = (SelectedOption == option) and Color3.fromRGB(50, 50, 50) or Color3.fromRGB(35, 35, 35)
+		OptionButton.BorderSizePixel = 0
+		OptionButton.Font = Enum.Font.RobotoMono
+		OptionButton.Text = tostring(option)
+		OptionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		OptionButton.TextScaled = true
+
+		local optionConstraint = Instance.new("UITextSizeConstraint")
+		optionConstraint.Parent = OptionButton
+		optionConstraint.MaxTextSize = 14
+
+		OptionButton.MouseEnter:Connect(function()
+			if SelectedOption ~= option then
+				OptionButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+			end
+		end)
+
+		OptionButton.MouseLeave:Connect(function()
+			if SelectedOption ~= option then
+				OptionButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+			end
+		end)
+
+		OptionButton.MouseButton1Click:Connect(function()
+			-- Update all buttons
+			for _, btn in pairs(OptionsFrame:GetChildren()) do
+				if btn:IsA("TextButton") then
+					btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+				end
+			end
+			
+			SelectedOption = option
+			OptionButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+			UpdateLabel()
+			IsOpen = false
+			UpdateDropdown()
+
+			if SelectFunction then
+				local success, err = pcall(function()
+					if type(SelectFunction) == "function" then
+						SelectFunction(tonumber(SelectedOption))
+					elseif type(SelectFunction) == "string" then
+						loadstring(SelectFunction)(tonumber(SelectedOption))
+					end
+				end)
+
+				if not success then
+					warn("Number select callback error:", err)
+				end
+			end
+		end)
+	end
+
+	DropdownButton.MouseButton1Click:Connect(function()
+		IsOpen = not IsOpen
+		UpdateDropdown()
+	end)
+
+	return {
+		Frame = DropdownFrame,
+		GetSelected = function() return tonumber(SelectedOption) end,
+		SetSelected = function(number)
+			local numStr = tostring(number)
+			if table.find(OptionsTable, numStr) then
+				SelectedOption = numStr
+				UpdateLabel()
+				-- Update button colors
+				for _, btn in pairs(OptionsFrame:GetChildren()) do
+					if btn:IsA("TextButton") then
+						btn.BackgroundColor3 = (btn.Text == numStr) and Color3.fromRGB(50, 50, 50) or Color3.fromRGB(35, 35, 35)
+					end
+				end
+			end
+		end
+	}
+end
+
+function LoadUi:NewSlider(SliderName, MinValue, MaxValue, DefaultValue, Increment, ValueCallback, TargetFrame)
+	local targetFrame = TargetFrame or ScriptUi
+	if not targetFrame or not targetFrame.Parent then
+		warn("LoadUi:NewSlider() - No valid target frame.")
+		return nil
+	end
+
+	local minVal = MinValue or 0
+	local maxVal = MaxValue or 100
+	local currentValue = DefaultValue or minVal
+	local increment = Increment or 1
+
+	local SliderFrame = Instance.new("Frame")
+	SliderFrame.Parent = targetFrame
+	SliderFrame.Name = "NewSlider"
+	SliderFrame.Size = UDim2.new(1, -10, 0, 60)
+	SliderFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	SliderFrame.BorderSizePixel = 0
+
+	local sliderCorner = Instance.new("UICorner")
+	sliderCorner.CornerRadius = UDim.new(0, 5)
+	sliderCorner.Parent = SliderFrame
+
+	local SliderLabel = Instance.new("TextLabel")
+	SliderLabel.Parent = SliderFrame
+	SliderLabel.Name = "Label"
+	SliderLabel.BackgroundTransparency = 1
+	SliderLabel.Position = UDim2.new(0, 10, 0, 5)
+	SliderLabel.Size = UDim2.new(0.7, 0, 0, 18)
+	SliderLabel.Font = Enum.Font.RobotoMono
+	SliderLabel.Text = tostring(SliderName or "Slider")
+	SliderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	SliderLabel.TextScaled = true
+	SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local labelConstraint = Instance.new("UITextSizeConstraint")
+	labelConstraint.Parent = SliderLabel
+	labelConstraint.MaxTextSize = 14
+
+	local ValueLabel = Instance.new("TextLabel")
+	ValueLabel.Parent = SliderFrame
+	ValueLabel.Name = "Value"
+	ValueLabel.BackgroundTransparency = 1
+	ValueLabel.AnchorPoint = Vector2.new(1, 0)
+	ValueLabel.Position = UDim2.new(1, -10, 0, 5)
+	ValueLabel.Size = UDim2.new(0.25, 0, 0, 18)
+	ValueLabel.Font = Enum.Font.RobotoMono
+	ValueLabel.Text = tostring(currentValue)
+	ValueLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+	ValueLabel.TextScaled = true
+	ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+
+	local valueConstraint = Instance.new("UITextSizeConstraint")
+	valueConstraint.Parent = ValueLabel
+	valueConstraint.MaxTextSize = 13
+
+	local SliderTrack = Instance.new("Frame")
+	SliderTrack.Parent = SliderFrame
+	SliderTrack.Name = "Track"
+	SliderTrack.Position = UDim2.new(0, 10, 0, 35)
+	SliderTrack.Size = UDim2.new(1, -20, 0, 6)
+	SliderTrack.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	SliderTrack.BorderSizePixel = 0
+
+	local trackCorner = Instance.new("UICorner")
+	trackCorner.CornerRadius = UDim.new(0.5, 0)
+	trackCorner.Parent = SliderTrack
+
+	local SliderFill = Instance.new("Frame")
+	SliderFill.Parent = SliderTrack
+	SliderFill.Name = "Fill"
+	SliderFill.Size = UDim2.new((currentValue - minVal) / (maxVal - minVal), 0, 1, 0)
+	SliderFill.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+	SliderFill.BorderSizePixel = 0
+
+	local fillCorner = Instance.new("UICorner")
+	fillCorner.CornerRadius = UDim.new(0.5, 0)
+	fillCorner.Parent = SliderFill
+
+	local SliderKnob = Instance.new("Frame")
+	SliderKnob.Parent = SliderTrack
+	SliderKnob.Name = "Knob"
+	SliderKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+	SliderKnob.Position = UDim2.new((currentValue - minVal) / (maxVal - minVal), 0, 0.5, 0)
+	SliderKnob.Size = UDim2.new(0, 16, 0, 16)
+	SliderKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	SliderKnob.BorderSizePixel = 0
+
+	local knobCorner = Instance.new("UICorner")
+	knobCorner.CornerRadius = UDim.new(1, 0)
+	knobCorner.Parent = SliderKnob
+
+	local SliderButton = Instance.new("TextButton")
+	SliderButton.Parent = SliderFrame
+	SliderButton.Name = "Button"
+	SliderButton.Position = UDim2.new(0, 10, 0, 28)
+	SliderButton.Size = UDim2.new(1, -20, 0, 20)
+	SliderButton.BackgroundTransparency = 1
+	SliderButton.Text = ""
+	SliderButton.ZIndex = 2
+
+	local dragging = false
+	local UserInputService = game:GetService("UserInputService")
+
+	local function UpdateSlider(input)
+		local relativeX = math.clamp((input.Position.X - SliderTrack.AbsolutePosition.X) / SliderTrack.AbsoluteSize.X, 0, 1)
+		local rawValue = minVal + (relativeX * (maxVal - minVal))
+		currentValue = math.floor(rawValue / increment + 0.5) * increment
+		currentValue = math.clamp(currentValue, minVal, maxVal)
+
+		ValueLabel.Text = tostring(currentValue)
+		
+		local TweenService = game:GetService("TweenService")
+		local fillTween = TweenService:Create(SliderFill, TweenInfo.new(0.1), {
+			Size = UDim2.new((currentValue - minVal) / (maxVal - minVal), 0, 1, 0)
+		})
+		local knobTween = TweenService:Create(SliderKnob, TweenInfo.new(0.1), {
+			Position = UDim2.new((currentValue - minVal) / (maxVal - minVal), 0, 0.5, 0)
+		})
+		fillTween:Play()
+		knobTween:Play()
+
+		if ValueCallback then
+			local success, err = pcall(function()
+				if type(ValueCallback) == "function" then
+					ValueCallback(currentValue)
+				elseif type(ValueCallback) == "string" then
+					loadstring(ValueCallback)(currentValue)
+				end
+			end)
+
+			if not success then
+				warn("Slider callback error:", err)
+			end
+		end
+	end
+
+	SliderButton.MouseButton1Down:Connect(function()
+		dragging = true
+	end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = false
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			UpdateSlider(input)
+		end
+	end)
+
+	SliderButton.MouseButton1Click:Connect(function(input)
+		UpdateSlider(input)
+	end)
+
+	return {
+		Frame = SliderFrame,
+		GetValue = function() return currentValue end,
+		SetValue = function(value)
+			currentValue = math.clamp(value, minVal, maxVal)
+			currentValue = math.floor(currentValue / increment + 0.5) * increment
+			ValueLabel.Text = tostring(currentValue)
+			SliderFill.Size = UDim2.new((currentValue - minVal) / (maxVal - minVal), 0, 1, 0)
+			SliderKnob.Position = UDim2.new((currentValue - minVal) / (maxVal - minVal), 0, 0.5, 0)
+		end,
+		SetMinMax = function(newMin, newMax)
+			minVal = newMin
+			maxVal = newMax
+			currentValue = math.clamp(currentValue, minVal, maxVal)
+			ValueLabel.Text = tostring(currentValue)
+		end
+	}
 end
 
 function LoadUi:NewTab(TabName)
