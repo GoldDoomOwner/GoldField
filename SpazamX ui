@@ -40,7 +40,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	-- Main Frame
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = ScreenGui
-	MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+	MainFrame.BackgroundColor3 = Color3.fromRGB(15, 25, 45)
 	MainFrame.BorderSizePixel = 0
 	MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 	MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -54,7 +54,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	-- Sidebar
 	Sidebar.Name = "Sidebar"
 	Sidebar.Parent = MainFrame
-	Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 23)
+	Sidebar.BackgroundColor3 = Color3.fromRGB(10, 20, 40)
 	Sidebar.BorderSizePixel = 0
 	Sidebar.Size = UDim2.new(0, 180, 1, 0)
 	Sidebar.ZIndex = 2
@@ -93,7 +93,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	-- Content Area
 	ContentArea.Name = "ContentArea"
 	ContentArea.Parent = MainFrame
-	ContentArea.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+	ContentArea.BackgroundColor3 = Color3.fromRGB(15, 25, 45)
 	ContentArea.BorderSizePixel = 0
 	ContentArea.Position = UDim2.new(0, 180, 0, 0)
 	ContentArea.Size = UDim2.new(1, -180, 1, 0)
@@ -101,7 +101,7 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	-- Top Bar
 	TopBar.Name = "TopBar"
 	TopBar.Parent = ContentArea
-	TopBar.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+	TopBar.BackgroundColor3 = Color3.fromRGB(20, 30, 55)
 	TopBar.BorderSizePixel = 0
 	TopBar.Size = UDim2.new(1, 0, 0, 45)
 
@@ -223,7 +223,7 @@ function LoadUi:NewTab(TabName)
 	local TabButton = Instance.new("TextButton")
 	TabButton.Name = "TabButton_" .. tostring(TabName)
 	TabButton.Parent = SidebarContainer
-	TabButton.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+	TabButton.BackgroundColor3 = Color3.fromRGB(20, 30, 50)
 	TabButton.BorderSizePixel = 0
 	TabButton.Size = UDim2.new(1, 0, 0, 35)
 	TabButton.Font = Enum.Font.Gotham
@@ -240,7 +240,7 @@ function LoadUi:NewTab(TabName)
 	TabButton.Activated:Connect(function()
 		for _, tab in pairs(Tabs) do
 			tab.Frame.Visible = false
-			tab.Button.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+			tab.Button.BackgroundColor3 = Color3.fromRGB(20, 30, 50)
 			tab.Button.TextColor3 = Color3.fromRGB(180, 180, 180)
 		end
 
@@ -298,7 +298,7 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction, TargetFrame)
 	local Button = Instance.new("TextButton")
 	Button.Parent = targetFrame
 	Button.Name = "Button"
-	Button.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+	Button.BackgroundColor3 = Color3.fromRGB(25, 40, 65)
 	Button.BorderSizePixel = 0
 	Button.Size = UDim2.new(1, 0, 0, 38)
 	Button.Font = Enum.Font.Gotham
@@ -312,11 +312,11 @@ function LoadUi:NewButton(NameOfButton, ButtonFunction, TargetFrame)
 	corner.Parent = Button
 
 	Button.MouseEnter:Connect(function()
-		Button.BackgroundColor3 = Color3.fromRGB(45, 45, 48)
+		Button.BackgroundColor3 = Color3.fromRGB(35, 50, 75)
 	end)
 
 	Button.MouseLeave:Connect(function()
-		Button.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+		Button.BackgroundColor3 = Color3.fromRGB(25, 40, 65)
 	end)
 
 	Button.Activated:Connect(function()
