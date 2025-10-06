@@ -37,6 +37,28 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	ScreenGui.ResetOnSpawn = false
 
+	-- Galaxy Background
+	local GalaxyBackground = Instance.new("ImageLabel")
+	GalaxyBackground.Name = "GalaxyBackground"
+	GalaxyBackground.Parent = ScreenGui
+	GalaxyBackground.BackgroundTransparency = 1
+	GalaxyBackground.Size = UDim2.new(1, 0, 1, 0)
+	GalaxyBackground.Image = "rbxassetid://6073763717" -- Galaxy space image
+	GalaxyBackground.ImageTransparency = 0.3
+	GalaxyBackground.ScaleType = Enum.ScaleType.Crop
+	GalaxyBackground.ZIndex = -1
+
+	-- Animate the galaxy rotation
+	task.spawn(function()
+		while GalaxyBackground and GalaxyBackground.Parent do
+			for rotation = 0, 360, 0.5 do
+				if not GalaxyBackground or not GalaxyBackground.Parent then break end
+				GalaxyBackground.Rotation = rotation
+				task.wait(0.05)
+			end
+		end
+	end)
+
 	-- Main Frame
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = ScreenGui
@@ -394,7 +416,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 		
 		local TweenService = game:GetService("TweenService")
 		TweenService:Create(Switch, TweenInfo.new(0.2), {
-			BackgroundColor3 = ToggleState and Color3.fromRGB(45, 120, 255) or Color3.fromRGB(60, 60, 63)
+			BackgroundColor3 = ToggleState and Color3.fromRGB(45, 120, 255) or Color3.fromRGB(40, 60, 90)
 		}):Play()
 		TweenService:Create(Circle, TweenInfo.new(0.2), {
 			Position = ToggleState and UDim2.new(1, -18, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
