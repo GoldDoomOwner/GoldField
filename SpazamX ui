@@ -340,7 +340,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 
 	local Frame = Instance.new("Frame")
 	Frame.Parent = targetFrame
-	Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+	Frame.BackgroundColor3 = Color3.fromRGB(25, 40, 65)
 	Frame.BorderSizePixel = 0
 	Frame.Size = UDim2.new(1, 0, 0, 38)
 
@@ -364,7 +364,7 @@ function LoadUi:NewToggle(ToggleName, DefaultState, ToggleFunction, TargetFrame)
 	Switch.AnchorPoint = Vector2.new(1, 0.5)
 	Switch.Position = UDim2.new(1, -12, 0.5, 0)
 	Switch.Size = UDim2.new(0, 40, 0, 20)
-	Switch.BackgroundColor3 = ToggleState and Color3.fromRGB(45, 120, 255) or Color3.fromRGB(60, 60, 63)
+	Switch.BackgroundColor3 = ToggleState and Color3.fromRGB(45, 120, 255) or Color3.fromRGB(40, 60, 90)
 	Switch.BorderSizePixel = 0
 
 	local switchCorner = Instance.new("UICorner")
@@ -454,7 +454,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 
 	local Frame = Instance.new("Frame")
 	Frame.Parent = targetFrame
-	Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+	Frame.BackgroundColor3 = Color3.fromRGB(25, 40, 65)
 	Frame.BorderSizePixel = 0
 	Frame.Size = UDim2.new(1, 0, 0, 38)
 	Frame.ClipsDescendants = true
@@ -495,7 +495,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 	OptionsFrame.Parent = Frame
 	OptionsFrame.Position = UDim2.new(0, 0, 0, 38)
 	OptionsFrame.Size = UDim2.new(1, 0, 0, #OptionsTable * 32)
-	OptionsFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+	OptionsFrame.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 	OptionsFrame.BorderSizePixel = 0
 
 	local optLayout = Instance.new("UIListLayout")
@@ -506,7 +506,7 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 		local OptButton = Instance.new("TextButton")
 		OptButton.Parent = OptionsFrame
 		OptButton.Size = UDim2.new(1, 0, 0, 32)
-		OptButton.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+		OptButton.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 		OptButton.BorderSizePixel = 0
 		OptButton.Font = Enum.Font.Gotham
 		OptButton.Text = "  " .. tostring(option)
@@ -515,11 +515,11 @@ function LoadUi:NewDropdown(DropdownName, Options, DefaultOption, SelectFunction
 		OptButton.TextXAlignment = Enum.TextXAlignment.Left
 
 		OptButton.MouseEnter:Connect(function()
-			OptButton.BackgroundColor3 = Color3.fromRGB(40, 40, 43)
+			OptButton.BackgroundColor3 = Color3.fromRGB(30, 45, 70)
 		end)
 
 		OptButton.MouseLeave:Connect(function()
-			OptButton.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+			OptButton.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 		end)
 
 		OptButton.Activated:Connect(function()
@@ -563,7 +563,7 @@ function LoadUi:NewSlider(SliderName, MinValue, MaxValue, DefaultValue, Incremen
 
 	local Frame = Instance.new("Frame")
 	Frame.Parent = targetFrame
-	Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+	Frame.BackgroundColor3 = Color3.fromRGB(25, 40, 65)
 	Frame.BorderSizePixel = 0
 	Frame.Size = UDim2.new(1, 0, 0, 55)
 
@@ -598,7 +598,7 @@ function LoadUi:NewSlider(SliderName, MinValue, MaxValue, DefaultValue, Incremen
 	Track.Parent = Frame
 	Track.Position = UDim2.new(0, 12, 0, 32)
 	Track.Size = UDim2.new(1, -24, 0, 6)
-	Track.BackgroundColor3 = Color3.fromRGB(50, 50, 53)
+	Track.BackgroundColor3 = Color3.fromRGB(20, 30, 50)
 	Track.BorderSizePixel = 0
 
 	local trackCorner = Instance.new("UICorner")
@@ -691,7 +691,7 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 
 	local Frame = Instance.new("Frame")
 	Frame.Parent = targetFrame
-	Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+	Frame.BackgroundColor3 = Color3.fromRGB(25, 40, 65)
 	Frame.BorderSizePixel = 0
 	Frame.Size = UDim2.new(1, 0, 0, 60)
 
@@ -714,8 +714,8 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	TextBox.Parent = Frame
 	TextBox.Position = UDim2.new(0, 12, 0, 30)
 	TextBox.Size = UDim2.new(1, -24, 0, 22)
-	TextBox.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
-	TextBox.BorderColor3 = Color3.fromRGB(50, 50, 53)
+	TextBox.BackgroundColor3 = Color3.fromRGB(15, 25, 45)
+	TextBox.BorderColor3 = Color3.fromRGB(30, 45, 70)
 	TextBox.BorderSizePixel = 1
 	TextBox.Font = Enum.Font.Gotham
 	TextBox.Text = ""
@@ -739,7 +739,7 @@ function LoadUi:NewTextInput(InputName, PlaceholderText, InputCallback, TargetFr
 	end)
 
 	TextBox.FocusLost:Connect(function(enterPressed)
-		TextBox.BorderColor3 = Color3.fromRGB(50, 50, 53)
+		TextBox.BorderColor3 = Color3.fromRGB(30, 45, 70)
 		if InputCallback and enterPressed then
 			pcall(function()
 				if type(InputCallback) == "function" then
@@ -810,7 +810,7 @@ function LoadUi:NewMultiSelectDropdown(DropdownName, MinSelections, MaxSelection
 	OptionsFrame.Parent = Frame
 	OptionsFrame.Position = UDim2.new(0, 0, 0, 38)
 	OptionsFrame.Size = UDim2.new(1, 0, 0, #OptionsTable * 32)
-	OptionsFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+	OptionsFrame.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 	OptionsFrame.BorderSizePixel = 0
 
 	local optLayout = Instance.new("UIListLayout")
@@ -821,7 +821,7 @@ function LoadUi:NewMultiSelectDropdown(DropdownName, MinSelections, MaxSelection
 		local OptButton = Instance.new("TextButton")
 		OptButton.Parent = OptionsFrame
 		OptButton.Size = UDim2.new(1, 0, 0, 32)
-		OptButton.BackgroundColor3 = (SelectedOption == option) and Color3.fromRGB(45, 120, 255) or Color3.fromRGB(30, 30, 33)
+		OptButton.BackgroundColor3 = (SelectedOption == option) and Color3.fromRGB(45, 120, 255) or Color3.fromRGB(20, 35, 60)
 		OptButton.BorderSizePixel = 0
 		OptButton.Font = Enum.Font.Gotham
 		OptButton.Text = "  " .. tostring(option)
@@ -831,20 +831,20 @@ function LoadUi:NewMultiSelectDropdown(DropdownName, MinSelections, MaxSelection
 
 		OptButton.MouseEnter:Connect(function()
 			if SelectedOption ~= option then
-				OptButton.BackgroundColor3 = Color3.fromRGB(40, 40, 43)
+				OptButton.BackgroundColor3 = Color3.fromRGB(30, 45, 70)
 			end
 		end)
 
 		OptButton.MouseLeave:Connect(function()
 			if SelectedOption ~= option then
-				OptButton.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+				OptButton.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 			end
 		end)
 
 		OptButton.Activated:Connect(function()
 			for _, btn in pairs(OptionsFrame:GetChildren()) do
 				if btn:IsA("TextButton") then
-					btn.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+					btn.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 				end
 			end
 			
@@ -893,7 +893,7 @@ function LoadUi:Notify(Title, Message, Duration, NotifType)
 	local Frame = Instance.new("Frame")
 	Frame.Name = "Notification"
 	Frame.Parent = notifContainer
-	Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 33)
+	Frame.BackgroundColor3 = Color3.fromRGB(20, 35, 60)
 	Frame.BorderSizePixel = 0
 	Frame.AnchorPoint = Vector2.new(1, 1)
 	Frame.Size = UDim2.new(0, 300, 0, 80)
