@@ -102,23 +102,26 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	CurrentTab = nil
 	Tabs = {}
 
+	-- Get selected gradient preset
+	local selectedGradient = GradientPresets[Gradient] or GradientPresets["Default"]
+
 	-- Create all instances first
 	local GoldField = Instance.new("ScreenGui")
 	local LoadingUi = Instance.new("Frame")
-	local Default_Gradient = Instance.new("UIGradient")
+	local Loading_Gradient = Instance.new("UIGradient")
 	local CornerIT = Instance.new("UICorner")
 	local MainText = Instance.new("TextLabel")
 	local OtherText = Instance.new("TextLabel")
 	local VersionText = Instance.new("TextLabel")
 	local MainUi = Instance.new("Frame")
 	local CornerIT_2 = Instance.new("UICorner")
-	local Default_Gradient_2 = Instance.new("UIGradient")
+	local MainUi_Gradient = Instance.new("UIGradient")
 	local Player = Instance.new("ImageLabel")
 	local CornerIT_3 = Instance.new("UICorner")
 	local Display = Instance.new("TextLabel")
 	local UserName = Instance.new("TextLabel")
 	local TopUI = Instance.new("Frame")
-	local Default_Gradient_3 = Instance.new("UIGradient")
+	local TopUI_Gradient = Instance.new("UIGradient")
 	local MainText_2 = Instance.new("TextLabel")
 	local Minimize = Instance.new("TextButton")
 	local CornerIT_5 = Instance.new("UICorner")
@@ -155,12 +158,10 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	loadingSizeConstraint.MinSize = Vector2.new(200, 80)
 	loadingSizeConstraint.MaxSize = Vector2.new(400, 120)
 
-	Default_Gradient.Color = ColorSequence.new{
-		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
-		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))
-	}
-	Default_Gradient.Name = "Default_Gradient"
-	Default_Gradient.Parent = LoadingUi
+	Loading_Gradient.Color = selectedGradient.Color
+	Loading_Gradient.Rotation = selectedGradient.Rotation
+	Loading_Gradient.Name = "Loading_Gradient"
+	Loading_Gradient.Parent = LoadingUi
 
 	CornerIT.CornerRadius = UDim.new(0, 16)
 	CornerIT.Name = "CornerIT"
@@ -247,12 +248,10 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	CornerIT_2.Name = "CornerIT"
 	CornerIT_2.Parent = MainUi
 
-	Default_Gradient_2.Color = ColorSequence.new{
-		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
-		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))
-	}
-	Default_Gradient_2.Name = "Default_Gradient"
-	Default_Gradient_2.Parent = MainUi
+	MainUi_Gradient.Color = selectedGradient.Color
+	MainUi_Gradient.Rotation = selectedGradient.Rotation
+	MainUi_Gradient.Name = "MainUi_Gradient"
+	MainUi_Gradient.Parent = MainUi
 
 	Player.Name = "Player"
 	Player.Parent = MainUi
@@ -314,12 +313,10 @@ function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, Show
 	TopUI.Position = UDim2.new(0, 0, 0, 0)
 	TopUI.Size = UDim2.new(1, 0, 0.08, 0)
 
-	Default_Gradient_3.Color = ColorSequence.new{
-		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
-		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))
-	}
-	Default_Gradient_3.Name = "Default_Gradient"
-	Default_Gradient_3.Parent = TopUI
+	TopUI_Gradient.Color = selectedGradient.Color
+	TopUI_Gradient.Rotation = selectedGradient.Rotation
+	TopUI_Gradient.Name = "TopUI_Gradient"
+	TopUI_Gradient.Parent = TopUI
 
 	MainText_2.Name = "MainText"
 	MainText_2.Parent = TopUI
