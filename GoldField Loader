@@ -22,6 +22,79 @@ local TabContainer = nil
 local CurrentTab = nil
 local Tabs = {}
 
+local GradientPresets = {
+	["Default"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(20, 20, 20)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(58, 57, 57))
+		},
+		Rotation = 90
+	},
+	["Deep Red"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(60, 10, 10)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(120, 20, 20))
+		},
+		Rotation = 90
+	},
+	["Ocean Blue"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 30, 60)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 60, 120))
+		},
+		Rotation = 90
+	},
+	["Purple Dream"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 10, 60)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(80, 20, 120))
+		},
+		Rotation = 90
+	},
+	["Forest Green"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 40, 20)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 80, 40))
+		},
+		Rotation = 90
+	},
+	["Sunset Orange"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(80, 30, 10)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(160, 60, 20))
+		},
+		Rotation = 90
+	},
+	["Pink Candy"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(80, 20, 60)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(160, 40, 120))
+		},
+		Rotation = 90
+	},
+	["Dark Purple"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(30, 10, 50)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(60, 20, 100))
+		},
+		Rotation = 90
+	},
+	["Gold Luxury"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(60, 50, 10)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(120, 100, 20))
+		},
+		Rotation = 90
+	},
+	["Cyber Blue"] = {
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 50, 70)), 
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 100, 140))
+		},
+		Rotation = 90
+	}
+}
+
 function LoadUi:LoadWindow(name1, name2, versionOfUi, Gradient, mainUiName, ShowPlayerUi)
 	-- Reset variables for new window
 	ScriptUi = nil
